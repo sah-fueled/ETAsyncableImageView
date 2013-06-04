@@ -11,6 +11,7 @@
 #import "DiskCache.h"
 #import "MemoryCache.h"
 #import "NSString+MD5.h"
+#import "ImageDownloader.h"
 
 typedef enum {
     AsyncableImageTypeUnknown = -1,
@@ -32,38 +33,13 @@ typedef enum {
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url;
 - (void)storeImage:(UIImage*)image withURL:(NSString*)url;
-- (void)fetchImageFromCacheWithURL:(NSString *)url ForView:(UIImageView *)imageView;
-- (void)fetchImageFromDiskWithURL:(NSString *)url ForView:(UIImageView *)imageView;
-- (void)fetchImageFromServerWithURL:(NSString *)url ForView:(UIImageView *)imageView;
-
-- (void)startImageDownloadingFromURL:(NSString *)url ForView:(UIImageView *)imageView;
+- (void)startImageDownloadingFromURL:(NSString *)url;
 
 
 @end
 
 @implementation ImageLoader
 
-- (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
-                              withURL:(NSString*)url{
-    
-    UIImage *image;
-    switch (dataSource) {
-        case DataSourceTypeMemoryCache:
-            image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:url]];
-            break;
-        case DataSourceTypeDiskCache:
-            image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:url]];
-            break;
-        case DataSourceTypeServer:
-            image = [self fetchImageFromServerWithURL:url];
-            break;
-            
-        default:
-            break;
-    }
-    
-    return image;
-}
 - (UIImage *)loadImageWithURL:(NSString *)URL {
     UIImage *image;
     
@@ -74,41 +50,29 @@ typedef enum {
     }
     return image;
     
- }
-
-- (UIImage *)fetchImageFromServerWithURL:(NSString *)url {
-    UIImage *image;
-- (NSOperationQueue *)downloadQueue {
-    if (!_downloadQueue) {
-        _downloadQueue = [[NSOperationQueue alloc] init];
-        _downloadQueue.name = @"Image Downloader";
-        _downloadQueue.maxConcurrentOperationCount = 10;
-    }
-    return _downloadQueue;
 }
-
-- (UIImage *)loadImageWithURL:(NSString *)URL forView:(UIImageView *)imageView {
-    [self fetchImageFromCacheWithURL:URL ForView:imageView];
-    if (self.image) {
-        return self.image;
-    }
-    [self fetchImageFromDiskWithURL:URL ForView:imageView];
-    if (self.image ) {
-        return self.image ;
-    }
-    [self fetchImageFromServerWithURL:URL forView:imageView];
-    return self.image ;
-}
-
-- (void)fetchImageFromCacheWithURL:(NSString *)url ForView:(UIImageView *)imageView {
-    
-}
-
-- (void)fetchImageFromDiskWithURL:(NSString *)url ForView:(UIImageView *)imageView {    
-}
-
-
 #pragma mark - Private methods
+
+- (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
+                              withURL:(NSString*)url{
+ 
+    switch (dataSource) {
+        case DataSourceTypeMemoryCache:
+            self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:url]];
+            break;
+        case DataSourceTypeDiskCache:
+            self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:url]];
+            break;
+        case DataSourceTypeServer:
+            [self startImageDownloadingFromURL:url];
+            break;
+            
+        default:
+            break;
+    }
+    
+    return self.image;
+}
 
 -(AsyncableImageType)imageTypeForJTDynamicImageURL:(NSURL *)url {
     NSError *error = nil;
@@ -135,8 +99,7 @@ typedef enum {
     
 }
 
-- (void)storeImage:(UIImage *)image withURL:(NSString *)url
-{
+- (void)storeImage:(UIImage *)image withURL:(NSString *)url{
     
     NSData *imageData = nil;
     
@@ -154,17 +117,22 @@ typedef enum {
     
     [[DiskCache sharedCache] setCache:imageData forKey:url];
 }
-- (void)fetchImageFromServerWithURL:(NSString *)url forView:(UIImageView *)imageView {
-    
-    [self startImageDownloadingFromURL:url ForView:imageView];
-    
-    
+
+- (NSOperationQueue *)downloadQueue {
+    if (!_downloadQueue) {
+        _downloadQueue = [[NSOperationQueue alloc] init];
+        _downloadQueue.name = @"Image Downloader";
+        _downloadQueue.maxConcurrentOperationCount = 10;
+    }
+    return _downloadQueue;
 }
 
-- (void)startImageDownloadingFromURL:(NSString *)url ForView:(UIImageView *)imageView {
+- (void)startImageDownloadingFromURL:(NSString *)url {
     ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url delegate:self];
     [self.downloadQueue addOperation:imageDownloader];
 }
+
+#pragma mark - ImageDownloaderDelegate method
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
     self.image = downloader.image;
