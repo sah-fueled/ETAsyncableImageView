@@ -7,11 +7,12 @@
 //
 
 #import "AsyncableImageView.h"
-#import "UIImageView+Asyncable.h"
+#import "ImageLoader.h"
 
 @interface AsyncableImageView()
-@property(nonatomic, strong) UIImage *maskImage;
 
+@property(nonatomic, strong) UIImage *maskImage;
+@property(nonatomic, strong) ImageLoader *imageLoader;
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage;
 @end
 
@@ -29,6 +30,7 @@
         activity.frame = rect;
         activity.hidden = YES;
         [self addSubview:activity];
+        _imageLoader = [[ImageLoader alloc]init];
     }
     return self;
 }
@@ -45,6 +47,7 @@
         activity.frame = rect;
         activity.hidden = YES;
         [self addSubview:activity];
+        _imageLoader = [[ImageLoader alloc]init];
     }
     return self;
 }
@@ -55,7 +58,7 @@
 
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;
-    self.image = [self loadImageWithURL:url];
+    self.image = [self.imageLoader loadImageWithURL:url];
     if (self.image) {
         [self imageLoaded];
     }
