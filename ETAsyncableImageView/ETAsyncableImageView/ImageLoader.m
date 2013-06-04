@@ -1,3 +1,4 @@
+
 //
 //  ImageLoader.m
 //  ETAsyncableImageView
@@ -24,11 +25,19 @@ typedef enum {
 } DataSourceType;
 
 
-@interface ImageLoader ()
+@interface ImageLoader () <ImageDownloaderDelegate>
 
-- (UIImage *)fetchImageFromServerWithURL:(NSString *)url;
+@property (nonatomic, strong) NSOperationQueue *downloadQueue;
+@property (nonatomic, strong) UIImage *image;
+
 - (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url;
 - (void)storeImage:(UIImage*)image withURL:(NSString*)url;
+- (void)fetchImageFromCacheWithURL:(NSString *)url ForView:(UIImageView *)imageView;
+- (void)fetchImageFromDiskWithURL:(NSString *)url ForView:(UIImageView *)imageView;
+- (void)fetchImageFromServerWithURL:(NSString *)url ForView:(UIImageView *)imageView;
+
+- (void)startImageDownloadingFromURL:(NSString *)url ForView:(UIImageView *)imageView;
+
 
 @end
 
@@ -69,9 +78,35 @@ typedef enum {
 
 - (UIImage *)fetchImageFromServerWithURL:(NSString *)url {
     UIImage *image;
-    
-    return image;
+- (NSOperationQueue *)downloadQueue {
+    if (!_downloadQueue) {
+        _downloadQueue = [[NSOperationQueue alloc] init];
+        _downloadQueue.name = @"Image Downloader";
+        _downloadQueue.maxConcurrentOperationCount = 10;
+    }
+    return _downloadQueue;
 }
+
+- (UIImage *)loadImageWithURL:(NSString *)URL forView:(UIImageView *)imageView {
+    [self fetchImageFromCacheWithURL:URL ForView:imageView];
+    if (self.image) {
+        return self.image;
+    }
+    [self fetchImageFromDiskWithURL:URL ForView:imageView];
+    if (self.image ) {
+        return self.image ;
+    }
+    [self fetchImageFromServerWithURL:URL forView:imageView];
+    return self.image ;
+}
+
+- (void)fetchImageFromCacheWithURL:(NSString *)url ForView:(UIImageView *)imageView {
+    
+}
+
+- (void)fetchImageFromDiskWithURL:(NSString *)url ForView:(UIImageView *)imageView {    
+}
+
 
 #pragma mark - Private methods
 
@@ -118,6 +153,22 @@ typedef enum {
     }
     
     [[DiskCache sharedCache] setCache:imageData forKey:url];
+}
+- (void)fetchImageFromServerWithURL:(NSString *)url forView:(UIImageView *)imageView {
+    
+    [self startImageDownloadingFromURL:url ForView:imageView];
+    
+    
+}
+
+- (void)startImageDownloadingFromURL:(NSString *)url ForView:(UIImageView *)imageView {
+    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url delegate:self];
+    [self.downloadQueue addOperation:imageDownloader];
+}
+
+- (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
+    self.image = downloader.image;
+     
 }
 
 @end

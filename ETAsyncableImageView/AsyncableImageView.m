@@ -12,7 +12,7 @@
 @interface AsyncableImageView()
 
 @property(nonatomic, strong) UIImage *maskImage;
-@property(nonatomic, strong) ImageLoader *imageLoader;
+@property(nonatomic, weak) ImageLoader *imageLoader;
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage;
 @end
 
@@ -58,7 +58,7 @@
 
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;
-    self.image = [self.imageLoader loadImageWithURL:url];
+    self.image = [self.imageLoader loadImageWithURL:url forView:self];
     if (self.image) {
         [self imageLoaded];
     }
