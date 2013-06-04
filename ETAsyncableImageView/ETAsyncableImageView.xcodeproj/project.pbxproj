@@ -21,6 +21,8 @@
 		6996AC56175DDB1500059C44 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */; };
 		6996AC59175DDB1500059C44 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6996AC58175DDB1500059C44 /* ViewController.m */; };
 		6996AC61175DE77700059C44 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 6996AC60175DE77700059C44 /* Placeholder.png */; };
+		6996AC65175DE99000059C44 /* MemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6996AC64175DE99000059C44 /* MemoryCache.m */; };
+		6996AC68175DEA8600059C44 /* DiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6996AC67175DEA8600059C44 /* DiskCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +47,10 @@
 		6996AC57175DDB1500059C44 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6996AC58175DDB1500059C44 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6996AC60175DE77700059C44 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
+		6996AC63175DE99000059C44 /* MemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryCache.h; sourceTree = "<group>"; };
+		6996AC64175DE99000059C44 /* MemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoryCache.m; sourceTree = "<group>"; };
+		6996AC66175DEA8600059C44 /* DiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCache.h; sourceTree = "<group>"; };
+		6996AC67175DEA8600059C44 /* DiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +103,7 @@
 			children = (
 				6996AC4B175DDB1500059C44 /* AppDelegate.h */,
 				6996AC4C175DDB1500059C44 /* AppDelegate.m */,
+				6996AC62175DE8DC00059C44 /* AsyncableHelpers */,
 				6996AC5F175DE4D800059C44 /* Demo */,
 				6996AC43175DDB1500059C44 /* Supporting Files */,
 			);
@@ -126,6 +133,17 @@
 				6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */,
 			);
 			name = Demo;
+			sourceTree = "<group>";
+		};
+		6996AC62175DE8DC00059C44 /* AsyncableHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				6996AC63175DE99000059C44 /* MemoryCache.h */,
+				6996AC64175DE99000059C44 /* MemoryCache.m */,
+				6996AC66175DEA8600059C44 /* DiskCache.h */,
+				6996AC67175DEA8600059C44 /* DiskCache.m */,
+			);
+			name = AsyncableHelpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,8 +216,12 @@
 				6996AC49175DDB1500059C44 /* main.m in Sources */,
 				6996AC4D175DDB1500059C44 /* AppDelegate.m in Sources */,
 				6996AC59175DDB1500059C44 /* ViewController.m in Sources */,
+
 				3975770E175DE6CC0096099D /* AsyncableImageView.m in Sources */,
 				39757711175DE6E50096099D /* UIImageView+Asyncable.m in Sources */,
+
+				6996AC65175DE99000059C44 /* MemoryCache.m in Sources */,
+				6996AC68175DEA8600059C44 /* DiskCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
