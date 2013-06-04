@@ -29,7 +29,7 @@
 - (NSOperationQueue *)downloadQueue {
     if (!_downloadQueue) {
         _downloadQueue = [[NSOperationQueue alloc] init];
-        _downloadQueue.name = @"Download Queue";
+        _downloadQueue.name = @"Image Downloader";
         _downloadQueue.maxConcurrentOperationCount = 10;
     }
     return _downloadQueue;

@@ -11,6 +11,7 @@
 		39757717175DFC220096099D /* ImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 39757716175DFC220096099D /* ImageLoader.m */; };
 		3975771A175DFF9B0096099D /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 39757719175DFF9A0096099D /* ImageDownloader.m */; };
 		3975771D175E013C0096099D /* Asyncable.m in Sources */ = {isa = PBXBuildFile; fileRef = 3975771C175E013B0096099D /* Asyncable.m */; };
+		39757720175E11870096099D /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 3975771F175E11870096099D /* NSString+MD5.m */; };
 		6996AC3D175DDB1500059C44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6996AC3C175DDB1500059C44 /* UIKit.framework */; };
 		6996AC3F175DDB1500059C44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6996AC3E175DDB1500059C44 /* Foundation.framework */; };
 		6996AC41175DDB1500059C44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6996AC40175DDB1500059C44 /* CoreGraphics.framework */; };
@@ -36,6 +37,8 @@
 		39757719175DFF9A0096099D /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
 		3975771B175E013B0096099D /* Asyncable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asyncable.h; sourceTree = "<group>"; };
 		3975771C175E013B0096099D /* Asyncable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Asyncable.m; sourceTree = "<group>"; };
+		3975771E175E11870096099D /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = SOURCE_ROOT; };
+		3975771F175E11870096099D /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = SOURCE_ROOT; };
 		6996AC38175DDB1500059C44 /* ETAsyncableImageView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETAsyncableImageView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6996AC3C175DDB1500059C44 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6996AC3E175DDB1500059C44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -140,6 +143,8 @@
 		6996AC62175DE8DC00059C44 /* AsyncableHelpers */ = {
 			isa = PBXGroup;
 			children = (
+				3975771E175E11870096099D /* NSString+MD5.h */,
+				3975771F175E11870096099D /* NSString+MD5.m */,
 				3975770C175DE6CC0096099D /* AsyncableImageView.h */,
 				3975770D175DE6CC0096099D /* AsyncableImageView.m */,
 				39757715175DFC220096099D /* ImageLoader.h */,
@@ -232,6 +237,7 @@
 				39757717175DFC220096099D /* ImageLoader.m in Sources */,
 				3975771A175DFF9B0096099D /* ImageDownloader.m in Sources */,
 				3975771D175E013C0096099D /* Asyncable.m in Sources */,
+				39757720175E11870096099D /* NSString+MD5.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
