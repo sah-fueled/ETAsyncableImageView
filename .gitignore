@@ -1,18 +1,59 @@
-# Xcode
+www/app/webroot/files/u/*
+www/app/webroot/files/p/*
+www/app/webroot/files/i/*
+www/app/webroot/files/ai/*
+www/app/webroot/files/ap/*
+www/app/webroot/files/au/*
+www/app/tmp/*
+www/app/config/apns/*
+
 .DS_Store
-build/
-*.pbxuser
-!default.pbxuser
+php_log
+working_assets
+*.bak
+
+# XCode (and ancestors) per-user config (very noisy, and not relevant)
+*.mode1
 *.mode1v3
-!default.mode1v3
 *.mode2v3
-!default.mode2v3
+*.perspective
 *.perspectivev3
-!default.perspectivev3
-*.xcworkspace
-!default.xcworkspace
+*.pbxuser
 xcuserdata
-profile
-*.moved-aside
-DerivedData
-.idea/
+
+# Generated files
+VersionX-revision.h
+
+
+# build products
+build/
+*.[o]
+
+# Other source repository archive directories (protects when importing)
+.hg
+.svn
+CVS
+
+
+# automatic backup files
+*~.nib
+*.swp
+*~
+*(Autosaved).rtfd/
+Backup[ ]of[ ]*.pages/
+Backup[ ]of[ ]*.key/
+Backup[ ]of[ ]*.numbers/
+
+# xcode noise
+build/*
+*.pbxuser
+*.mode1v3
+
+# old skool
+.svn
+
+# osx noise
+.DS_Store
+
+# logs
+*.log
