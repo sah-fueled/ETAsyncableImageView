@@ -55,8 +55,10 @@
 
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;
-    [self loadImageWithURL:url];
-    
+    self.image = [self loadImageWithURL:url];
+    if (self.image) {
+        [self imageLoaded];
+    }
 }
 
 -(void)imageLoaded{
