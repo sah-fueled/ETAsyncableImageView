@@ -57,10 +57,19 @@
 }
 
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
-    [self setImage:maskImage];
-    [self setImage:[self.imageLoader loadImageWithURL:url]];
+    self.maskImage = maskImage;
+    self.image = [UIImage imageWithContentsOfFile:url];
+    
     if (self.image) {
         [self imageLoaded];
+    }
+    else {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoaded) name:@"IMAGE_DOWNLOADED" object:self.imageLoader];
+        [self.imageLoader loadImageWithURL:url ForImageView:self];
+        if (!self.image) {
+            activity.hidden = NO;
+            [activity startAnimating];
+        }
     }
 }
 
@@ -69,10 +78,7 @@
     activity.hidden = YES;
     [activity stopAnimating];
     
-     if (self.maskImage) {
-        self.image = [self maskImage:self.image withMask:self.maskImage];
-        self.maskImage = nil;
-    }
+
     
     if ([delegate respondsToSelector:@selector(imageLoadingFinished)]) {
         [delegate imageLoadingFinished];
@@ -94,6 +100,25 @@
     
 }
 
-
+-(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage {
+    
+	CGImageRef maskRef = maskImage.CGImage;
+	CGImageRef imageRef = image.CGImage;
+	CGImageRef mask = CGImageMaskCreate(CGImageGetWidth(maskRef),
+                                        CGImageGetHeight(maskRef),
+                                        CGImageGetBitsPerComponent(maskRef),
+                                        CGImageGetBitsPerPixel(maskRef),
+                                        CGImageGetBytesPerRow(maskRef),
+                                        CGImageGetDataProvider(maskRef), NULL, true);
+    
+	CGImageRef masked = CGImageCreateWithMask(imageRef, mask);
+    UIImage *img = [UIImage imageWithCGImage:masked];
+    
+    CFRelease(masked);
+    CFRelease(mask);
+    
+	return img;
+    
+}
 
 @end

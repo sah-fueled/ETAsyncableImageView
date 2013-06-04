@@ -31,21 +31,21 @@ typedef enum {
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
 @property (nonatomic, strong) UIImage *image;
 
-- (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url;
+- (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url ForImageView:(UIImageView *)imageView;
 - (void)storeImage:(UIImage*)image withURL:(NSString*)url;
-- (void)startImageDownloadingFromURL:(NSString *)url;
+- (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView;
 
 
 @end
 
 @implementation ImageLoader
 
-- (UIImage *)loadImageWithURL:(NSString *)URL {
+- (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
     UIImage *image;
     
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
-        image = [self fetchImageFromDataSource:i withURL:URL];
+        image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
         if(image) break;
     }
     return image;
@@ -54,7 +54,8 @@ typedef enum {
 #pragma mark - Private methods
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
-                              withURL:(NSString*)url{
+                              withURL:(NSString*)url
+                         ForImageView:(UIImageView *)imageView {
  
     switch (dataSource) {
         case DataSourceTypeMemoryCache:
@@ -64,7 +65,7 @@ typedef enum {
             self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:url]];
             break;
         case DataSourceTypeServer:
-            [self startImageDownloadingFromURL:url];
+            [self startImageDownloadingFromURL:url ForImageView:imageView];
             break;
             
         default:
@@ -129,15 +130,15 @@ typedef enum {
     return _downloadQueue;
 }
 
-- (void)startImageDownloadingFromURL:(NSString *)url {
-    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url delegate:self];
+- (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
+    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url ImageView:imageView delegate:self];
     [self.downloadQueue addOperation:imageDownloader];
 }
 
 #pragma mark - ImageDownloaderDelegate method
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
-    self.image = downloader.image;
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOADED" object:self];
      
 }
 

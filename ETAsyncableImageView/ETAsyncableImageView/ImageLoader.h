@@ -11,6 +11,6 @@
 
 @interface ImageLoader : NSObject
 
-- (UIImage *)loadImageWithURL:(NSString *)URL;
+- (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
 
 @end
