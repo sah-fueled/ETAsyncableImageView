@@ -10,8 +10,8 @@
 
 @interface DiskCache : NSObject
 
-+(DiskCache*) sharedCache;
--(void)setCache:(id)obj forKey:(NSString *)key;
--(id)getCacheForKey:(NSString *)key;
++(DiskCache *) sharedCache;
+-(void)setCache:(NSData *)data forKey:(NSString *)key;
+-(NSData *)getCacheForKey:(NSString *)key;
 
 @end

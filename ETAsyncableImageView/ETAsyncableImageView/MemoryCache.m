@@ -7,6 +7,7 @@
 //
 
 #import "MemoryCache.h"
+#import "NSString+MD5.h"
 
 @interface MemoryCache()
 
@@ -40,11 +41,6 @@
     return self;
 }
 
--(void)setCache:(id)obj forKey:(NSString *)key {
-    
-    [self.cache setObject:obj forKey:key];
-    
-}
 
 -(id)getCacheForKey:(NSString *)key {
     
@@ -52,5 +48,9 @@
     
 }
 
+- (void)setCache:(NSData *)data forKey:(NSString *)key{
+    [self.cache setObject:data forKey:key];
+
+}
 
 @end

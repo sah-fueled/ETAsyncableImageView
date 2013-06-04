@@ -7,6 +7,7 @@
 //
 
 #import "DiskCache.h"
+#import "NSString+MD5.h"
 
 @implementation DiskCache
 
@@ -43,14 +44,22 @@
     }
 }
 
--(void)setCache:(id)obj forKey:(NSString *)key {
+-(void)setCache:(NSData*)data forKey:(NSString *)key {
     
-    
+    NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:[key MD5]];
+    NSError *error = nil;
+    [data writeToURL:cacheFileURL options:0 error:&error];
 }
 
--(id)getCacheForKey:(NSString *)key {
+-(NSData *)getCacheForKey:(NSString *)key {
     
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSString *urlHash = [key MD5];
+    NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:urlHash];
     
+    return [fileManager contentsAtPath:[cacheFileURL path]];
+    
+//    return [UIImage imageWithData:[fileManager contentsAtPath:[cacheFileURL path]]];
 }
 
 -(NSURL *)asyncableCachesDirectory {

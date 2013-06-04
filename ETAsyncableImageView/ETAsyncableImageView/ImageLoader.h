@@ -9,12 +9,6 @@
 
 #import <Foundation/Foundation.h>
 
-typedef enum {
-    DataSourceTypeNSCache = 0,
-    DataSourceTypeDiskCache,
-    DataSourceTypeServer
-} DataSourceType;
-
 @interface ImageLoader : NSObject
 
 - (UIImage *)loadImageWithURL:(NSString *)URL;
