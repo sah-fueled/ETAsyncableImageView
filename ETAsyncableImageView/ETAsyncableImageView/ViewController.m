@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "DiskCache.h"
 
 @interface ViewController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -19,6 +20,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [[DiskCache sharedCache] setCache:nil forKey:@"cell"];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -37,6 +40,7 @@
 -(float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 50;
 }
+
 -(UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
 
     NSString *cellIdentifier = @"cell";

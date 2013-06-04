@@ -33,31 +33,37 @@
 }
 
 -(void)createCacheDirectory{
-    NSString *directoryName = @"Caches";
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,NSUserDomainMask, YES);
-    
-    NSString *applicationDirectory = [paths objectAtIndex:0];
-    NSString *filePathAndDirectory = [applicationDirectory stringByAppendingPathComponent:directoryName];
     NSError *error;
-    
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:filePathAndDirectory
-                                   withIntermediateDirectories:YES
-                                                    attributes:nil
-                                                         error:&error])
-    {
+    if(![[NSFileManager defaultManager]createDirectoryAtURL:[self asyncableCachesDirectory]
+                                withIntermediateDirectories:YES
+                                                 attributes:nil
+                                                      error:&error]){
         NSLog(@"Create directory error: %@", error);
+        
     }
 }
 
 -(void)setCache:(id)obj forKey:(NSString *)key {
     
-        
+    
 }
 
 -(id)getCacheForKey:(NSString *)key {
     
-        
+    
 }
+
+-(NSURL *)asyncableCachesDirectory {
+    NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory
+                                                           inDomains:NSUserDomainMask];
+    if ([urls count] > 0) {
+        return [[urls objectAtIndex:0] URLByAppendingPathComponent:@"Asyncable"];
+        
+    }
+    else {
+        return nil;
+    }
+}
+
 
 @end

@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
+    
     DstaSourceTypeNSCache = 0,
     DstaSourceTypeDiskCache,
     DstaSourceTypeServer
+    
 } DatsSourceType;
 
 @interface UIImageView (Asyncable)
