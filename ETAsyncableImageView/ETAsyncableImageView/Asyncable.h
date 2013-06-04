@@ -1,5 +1,5 @@
 //
-//  ImageLoader.h
+//  Asyncable.h
 //  ETAsyncableImageView
 //
 //  Created by plb-fueled on 6/4/13.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface ImageLoader : NSObject
+@interface Asyncable : NSObject
 
-- (UIImage *)loadImageWithURL:(NSString *)URL forView:(UIImageView *)imageView;
+-(UIImage *)imageForView:(UIImageView *)imageView fromURL:(NSString *)url;
 
 @end

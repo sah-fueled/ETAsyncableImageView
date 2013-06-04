@@ -7,47 +7,70 @@
 //
 
 #import "ImageLoader.h"
+#import "MemoryCache.h"
+#import "DiskCache.h"
+#import "ImageDownloader.h"
 
-@interface ImageLoader ()
+@interface ImageLoader () <ImageDownloaderDelegate>
 
-- (UIImage *)fetchImageFromCacheWithURL:(NSString *)url;
-- (UIImage *)fetchImageFromDiskWithURL:(NSString *)url;
-- (UIImage *)fetchImageFromServerWithURL:(NSString *)url;
+@property (nonatomic, strong) NSOperationQueue *downloadQueue;
+@property (nonatomic, strong) UIImage *image;
+
+- (void)fetchImageFromCacheWithURL:(NSString *)url ForView:(UIImageView *)imageView;
+- (void)fetchImageFromDiskWithURL:(NSString *)url ForView:(UIImageView *)imageView;
+- (void)fetchImageFromServerWithURL:(NSString *)url ForView:(UIImageView *)imageView;
+
+- (void)startImageDownloadingFromURL:(NSString *)url ForView:(UIImageView *)imageView;
 
 @end
 
 @implementation ImageLoader
 
-- (UIImage *)loadImageWithURL:(NSString *)URL {
-    UIImage *image;
-    image = [self fetchImageFromCacheWithURL:URL];
-    if (!image) {
-        return image;
+- (NSOperationQueue *)downloadQueue {
+    if (!_downloadQueue) {
+        _downloadQueue = [[NSOperationQueue alloc] init];
+        _downloadQueue.name = @"Download Queue";
+        _downloadQueue.maxConcurrentOperationCount = 10;
     }
-    image = [self fetchImageFromDiskWithURL:URL];
-    if (!image) {
-        return image;
+    return _downloadQueue;
+}
+
+- (UIImage *)loadImageWithURL:(NSString *)URL forView:(UIImageView *)imageView {
+    [self fetchImageFromCacheWithURL:URL ForView:imageView];
+    if (self.image) {
+        return self.image;
     }
-    image = [self fetchImageFromServerWithURL:URL];
-    return image;
+    [self fetchImageFromDiskWithURL:URL ForView:imageView];
+    if (self.image ) {
+        return self.image ;
+    }
+    [self fetchImageFromServerWithURL:URL forView:imageView];
+    return self.image ;
 }
 
-- (UIImage *)fetchImageFromCacheWithURL:(NSString *)url {
-    UIImage *image;
+- (void)fetchImageFromCacheWithURL:(NSString *)url ForView:(UIImageView *)imageView {
     
-    return image;
 }
 
-- (UIImage *)fetchImageFromDiskWithURL:(NSString *)url {
-    UIImage *image;
+- (void)fetchImageFromDiskWithURL:(NSString *)url ForView:(UIImageView *)imageView {
     
-    return image;
 }
 
-- (UIImage *)fetchImageFromServerWithURL:(NSString *)url {
-    UIImage *image;
+- (void)fetchImageFromServerWithURL:(NSString *)url forView:(UIImageView *)imageView {
     
-    return image;
+    [self startImageDownloadingFromURL:url ForView:imageView];
+    
+    
+}
+
+- (void)startImageDownloadingFromURL:(NSString *)url ForView:(UIImageView *)imageView {
+    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url delegate:self];
+    [self.downloadQueue addOperation:imageDownloader];
+}
+
+- (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
+    self.image = downloader.image;
+     
 }
 
 @end
