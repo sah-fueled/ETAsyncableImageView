@@ -18,6 +18,7 @@
 		6996AC53175DDB1500059C44 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6996AC52175DDB1500059C44 /* Default-568h@2x.png */; };
 		6996AC56175DDB1500059C44 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */; };
 		6996AC59175DDB1500059C44 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6996AC58175DDB1500059C44 /* ViewController.m */; };
+		6996AC61175DE77700059C44 /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 6996AC60175DE77700059C44 /* Placeholder.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		6996AC55175DDB1500059C44 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		6996AC57175DDB1500059C44 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6996AC58175DDB1500059C44 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		6996AC60175DE77700059C44 /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,9 +87,7 @@
 			children = (
 				6996AC4B175DDB1500059C44 /* AppDelegate.h */,
 				6996AC4C175DDB1500059C44 /* AppDelegate.m */,
-				6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */,
-				6996AC57175DDB1500059C44 /* ViewController.h */,
-				6996AC58175DDB1500059C44 /* ViewController.m */,
+				6996AC5F175DE4D800059C44 /* Demo */,
 				6996AC43175DDB1500059C44 /* Supporting Files */,
 			);
 			path = ETAsyncableImageView;
@@ -99,12 +99,23 @@
 				6996AC44175DDB1500059C44 /* ETAsyncableImageView-Info.plist */,
 				6996AC45175DDB1500059C44 /* InfoPlist.strings */,
 				6996AC48175DDB1500059C44 /* main.m */,
+				6996AC60175DE77700059C44 /* Placeholder.png */,
 				6996AC4A175DDB1500059C44 /* ETAsyncableImageView-Prefix.pch */,
 				6996AC4E175DDB1500059C44 /* Default.png */,
 				6996AC50175DDB1500059C44 /* Default@2x.png */,
 				6996AC52175DDB1500059C44 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		6996AC5F175DE4D800059C44 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				6996AC57175DDB1500059C44 /* ViewController.h */,
+				6996AC58175DDB1500059C44 /* ViewController.m */,
+				6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */,
+			);
+			name = Demo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +174,7 @@
 				6996AC51175DDB1500059C44 /* Default@2x.png in Resources */,
 				6996AC53175DDB1500059C44 /* Default-568h@2x.png in Resources */,
 				6996AC56175DDB1500059C44 /* MainStoryboard.storyboard in Resources */,
+				6996AC61175DE77700059C44 /* Placeholder.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
