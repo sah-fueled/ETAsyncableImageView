@@ -1,13 +1,13 @@
 
 //
-//  UIImageView+Asyncable.h
+//  ImageLoader.h
 //  ETAsyncableImageView
 //
 //  Created by plb-fueled on 6/4/13.
 //  Copyright (c) 2013 fueled.co. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 typedef enum {
     DataSourceTypeNSCache = 0,
@@ -15,9 +15,8 @@ typedef enum {
     DataSourceTypeServer
 } DataSourceType;
 
-@interface UIImageView (Asyncable)
+@interface ImageLoader : NSObject
 
 - (UIImage *)loadImageWithURL:(NSString *)URL;
-- (UIImage *)fetchImageWithURL:(NSString *)url FromDataSource:(DataSourceType)dataSourceType;
 
 @end
