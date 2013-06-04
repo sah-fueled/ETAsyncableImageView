@@ -10,4 +10,9 @@
 
 @implementation UIImageView (Asyncable)
 
+- (void)loadImageWithURL:(NSString *)URL {
+    
+    
+}
+
 @end

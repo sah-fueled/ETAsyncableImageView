@@ -7,6 +7,7 @@
 //
 
 #import "AsyncableImageView.h"
+#import "UIImageView+Asyncable.h"
 
 @interface AsyncableImageView()
 @property(nonatomic, strong) UIImage *maskImage;
@@ -54,6 +55,7 @@
 
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;
+    [self loadImageWithURL:url];
     
 }
 
