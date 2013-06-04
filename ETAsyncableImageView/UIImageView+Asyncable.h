@@ -9,13 +9,14 @@
 #import <UIKit/UIKit.h>
 
 typedef enum {
-    DstaSourceTypeNSCache = 0,
-    DstaSourceTypeDiskCache,
-    DstaSourceTypeServer
-} DatsSourceType;
+    DataSourceTypeNSCache = 0,
+    DataSourceTypeDiskCache,
+    DataSourceTypeServer
+} DataSourceType;
 
 @interface UIImageView (Asyncable)
 
-- (void)loadImageWithURL:(NSString *)URL;
+- (UIImage *)loadImageWithURL:(NSString *)URL;
+- (UIImage *)fetchImageWithURL:(NSString *)url FromDataSource:(DataSourceType)dataSourceType;
 
 @end

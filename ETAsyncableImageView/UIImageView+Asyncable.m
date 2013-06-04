@@ -7,12 +7,38 @@
 //
 
 #import "UIImageView+Asyncable.h"
+#import "DiskCache.h"
+#import "MemoryCache.h"
 
 @implementation UIImageView (Asyncable)
 
-- (void)loadImageWithURL:(NSString *)URL {
+- (UIImage *)loadImageWithURL:(NSString *)URL {
+    UIImage *image;
+    image = [self fetchImageWithURL:URL FromDataSource:DataSourceTypeNSCache];
+    return image;
     
+    image = [self fetchImageWithURL:URL FromDataSource:DataSourceTypeDiskCache];
+    return image;
     
+    image = [self fetchImageWithURL:URL FromDataSource:DataSourceTypeServer];
+    return image;
+}
+
+- (UIImage *)fetchImageWithURL:(NSString *)url FromDataSource:(DataSourceType)dataSourceType {
+    UIImage *image;
+    if (dataSourceType == DataSourceTypeNSCache) {
+        [MemoryCache sharedCache].
+    }
+    
+    else if (dataSourceType == DataSourceTypeDiskCache) {
+        
+    }
+    
+    else {
+        
+    }
+    
+    return image;
 }
 
 @end
