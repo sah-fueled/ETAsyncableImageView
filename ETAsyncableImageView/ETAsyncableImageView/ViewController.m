@@ -7,7 +7,10 @@
 //
 
 #import "ViewController.h"
-#import "DiskCache.h"
+#import "AsyncableImageView.h"
+
+#define kSampleDataUrl @"http://a1408.g.akamai.net/5/1408/1388/2005110404/1a1a1ad948be278cff2d96046ad90768d848b41947aa1986/sample_mpeg2.m2v.zip"
+#define kPlaceholderImage @"Placeholder"
 
 @interface ViewController () <UITableViewDelegate,UITableViewDataSource>
 
@@ -21,7 +24,7 @@
 {
     [super viewDidLoad];
     
-    [[DiskCache sharedCache] setCache:nil forKey:@"cell"];
+   
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -34,7 +37,7 @@
 #pragma mark - UITableViewDatasource methods
 
 -(int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return 1;
 }
 
 -(float)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -50,8 +53,9 @@
 
     }
     [cell.textLabel setText:[NSString stringWithFormat:@"cell %d",indexPath.row]];
-    UIImageView *imageView = [[UIImageView alloc]initWithFrame:CGRectMake(270,0,50,50)];
-    [imageView setImage:[UIImage imageNamed:@"Placeholder.png"]];
+    AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(270,0,50,50)];
+    UIImage *placeholder = [UIImage imageNamed:kPlaceholderImage];
+    [imageView showImageFromURL:kSampleDataUrl withMaskImage:placeholder];
     [cell.contentView addSubview:imageView];
     return cell;
 }

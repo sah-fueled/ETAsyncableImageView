@@ -118,11 +118,13 @@ typedef enum {
     [[DiskCache sharedCache] setCache:imageData forKey:url];
 }
 
+#pragma mark - NSOperation Methods
+
 - (NSOperationQueue *)downloadQueue {
     if (!_downloadQueue) {
         _downloadQueue = [[NSOperationQueue alloc] init];
         _downloadQueue.name = @"Image Downloader";
-        _downloadQueue.maxConcurrentOperationCount = 10;
+        _downloadQueue.maxConcurrentOperationCount = 1;
     }
     return _downloadQueue;
 }
