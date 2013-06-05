@@ -42,12 +42,11 @@ typedef enum {
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
     UIImage *image;
-    
+     NSLog(@"folder size %lli",[DiskCache sharedCache].diskCacheFolderSize);
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
         image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
         if(image){
-             NSLog(@"Image => %@", self.image);
             return image;
         }
     }
@@ -148,7 +147,12 @@ typedef enum {
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
     self.image = downloader.image;
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOADED" object:self];
+    if (self.image) {
+       [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOADED" object:self]; 
+    }
+    else {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOAD_FAILED" object:self];
+    }
     [self storeImage:self.image withURL:downloader.url];
 }
 

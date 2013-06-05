@@ -69,6 +69,8 @@
     else {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoaded)
                                                      name:@"IMAGE_DOWNLOADED" object:self.imageLoader];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoadingFailed)
+                                                     name:@"IMAGE_DOWNLOAD_FAILED" object:self.imageLoader];
         self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
         if (!self.image) {
             self.activity.hidden = NO;
