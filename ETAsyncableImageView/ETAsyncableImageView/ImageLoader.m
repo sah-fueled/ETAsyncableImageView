@@ -46,7 +46,10 @@ typedef enum {
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
         image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
-        if(image) break;
+        if(image){
+             NSLog(@"Image => %@", self.image);
+            return image;
+        }
     }
     return image;
     
@@ -60,9 +63,15 @@ typedef enum {
     switch (dataSource) {
         case DataSourceTypeMemoryCache:
             self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:url]];
+            if (self.image) {
+                return self.image;
+            }
             break;
         case DataSourceTypeDiskCache:
             self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:url]];
+            if (self.image) {
+                return self.image;
+            }
             break;
         case DataSourceTypeServer:
             [self startImageDownloadingFromURL:url ForImageView:imageView];
@@ -71,7 +80,7 @@ typedef enum {
         default:
             break;
     }
-    
+   
     return self.image;
 }
 
@@ -131,7 +140,7 @@ typedef enum {
 }
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
-    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url ImageView:imageView delegate:self];
+    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url delegate:self];
     [self.downloadQueue addOperation:imageDownloader];
 }
 
@@ -139,9 +148,8 @@ typedef enum {
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
     self.image = downloader.image;
-    NSLog(@"image = %@ %@",self.image,downloader.image);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOADED" object:self];
-     
+    [self storeImage:self.image withURL:downloader.url];
 }
 
 @end

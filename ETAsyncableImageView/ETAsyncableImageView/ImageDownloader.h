@@ -13,9 +13,9 @@
 @interface ImageDownloader : NSOperation
 
 @property (nonatomic, strong) UIImage *image;
-@property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) NSString *url;
 @property (nonatomic, assign) id <ImageDownloaderDelegate> delegate;
-- (id)initWithURL:(NSString *)url ImageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate;
+- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate;
 
 @end
 

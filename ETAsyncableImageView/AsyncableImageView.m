@@ -69,10 +69,13 @@
     else {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoaded)
                                                      name:@"IMAGE_DOWNLOADED" object:self.imageLoader];
-        [self.imageLoader loadImageWithURL:url ForImageView:self];
+        self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
         if (!self.image) {
             self.activity.hidden = NO;
             [self.activity startAnimating];
+        }
+        else {
+            [self imageLoaded];
         }
     }
 }
@@ -84,9 +87,9 @@
     NSLog(@"image Loaded");
     self.image = self.imageLoader.image;
     
-//    if ([delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-//        [delegate imageLoadingFinished];
-//    }
+    if ([delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+        [delegate imageLoadingFinished];
+    }
     
 }
 
