@@ -15,6 +15,8 @@
 #define CACHE_LONGEVITY 86400  // DO NOT EDIT
 #endif
 
+#define DISK_LIMIT 10000
+
 @implementation DiskCache
 
 +(DiskCache*) sharedCache{
@@ -62,7 +64,6 @@
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *urlHash = [key MD5];
-    NSLog(@"urlhash => %@", urlHash);
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:urlHash];
     
     return [fileManager contentsAtPath:[cacheFileURL path]];
@@ -121,6 +122,7 @@
     cacheEnumerator = [cacheFileList objectEnumerator];
     while (cacheFilePath = [cacheEnumerator nextObject]) {
         NSDictionary *cacheFileAttributes = [manager attributesOfItemAtPath:[cacheDirectory stringByAppendingPathComponent:cacheFilePath] error:&error];
+        NSLog(@"Cached file attributes ----- %@", cacheFileAttributes);
         cacheFolderSize += [cacheFileAttributes fileSize];
     }
     
