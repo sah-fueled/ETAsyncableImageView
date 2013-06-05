@@ -8,12 +8,10 @@
 
 #import "ImageDownloader.h"
 
-@interface ImageDownloader () 
-<<<<<<< HEAD
-@property (nonatomic, strong) NSString *url;
-=======
+@interface ImageDownloader ()
 
->>>>>>> origin/NSOperations
+//@property (nonatomic, strong) NSString *url;
+
 @property (nonatomic, strong)NSData *responseData;
 
 @end

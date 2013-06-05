@@ -44,16 +44,8 @@ typedef enum {
     
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
-<<<<<<< HEAD
         self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
         if(self.image) break;
-=======
-        image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
-        if(image){
-             NSLog(@"Image => %@", self.image);
-            return image;
-        }
->>>>>>> origin/NSOperations
     }
     return self.image;
     
