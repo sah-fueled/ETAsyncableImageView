@@ -7,7 +7,7 @@
 //
 
 #import "DiskCache.h"
-#import "NSString+MD5.h"
+#import "MemoryCache.h"
 
 #ifdef DEBUG
 #define CACHE_LONGEVITY 86400
@@ -53,17 +53,16 @@
 
 -(void)setCache:(NSData*)data forKey:(NSString *)key {
     
-    NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:[key MD5]];
+    NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     NSError *error = nil;
     [data writeToURL:cacheFileURL options:0 error:&error];
+    [[MemoryCache sharedCache] setCache:data forKey:key];
 }
 
 -(NSData *)getCacheForKey:(NSString *)key {
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSString *urlHash = [key MD5];
-    NSLog(@"urlhash => %@", urlHash);
-    NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:urlHash];
+    NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     
     return [fileManager contentsAtPath:[cacheFileURL path]];
     

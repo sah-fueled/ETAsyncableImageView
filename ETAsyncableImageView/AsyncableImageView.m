@@ -53,13 +53,14 @@
     }
     else {
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoaded)
-                                                     name:@"IMAGE_DOWNLOADED" object:self.imageLoader];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoadingFailed)
-                                                     name:@"IMAGE_DOWNLOAD_FAILED" object:self.imageLoader];
-
-
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(imageLoaded)
+                                                     name:@"IMAGE_DOWNLOADED"
+                                                   object:self.imageLoader];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(imageLoadingFailed)
+                                                     name:@"IMAGE_DOWNLOAD_FAILED"
+                                                   object:self.imageLoader];
 
         self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
         
@@ -141,7 +142,7 @@
     
     self.activity.hidden = YES;
     [self.activity stopAnimating];
-    NSLog(@"error");
+    NSLog(@"Error in loading image");
     if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
         [self.delegate imageLoadingFinished];
     }
