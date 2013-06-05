@@ -42,7 +42,7 @@ typedef enum {
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
 
-    
+    NSLog(@"-------------------------------------%lli", [DiskCache sharedCache].diskCacheFolderSize);
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
         self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];

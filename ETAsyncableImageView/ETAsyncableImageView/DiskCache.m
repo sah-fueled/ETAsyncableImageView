@@ -15,7 +15,7 @@
 #define CACHE_LONGEVITY 86400  // DO NOT EDIT
 #endif
 
-#define DISK_LIMIT 10000
+#define DISK_LIMIT 150000 
 
 @implementation DiskCache
 
@@ -57,7 +57,9 @@
     
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     NSError *error = nil;
+    
     [data writeToURL:cacheFileURL options:0 error:&error];
+    [self checkAndDumpDiskMemory];
     [[MemoryCache sharedCache] setCache:data forKey:key];
 }
 
@@ -66,10 +68,7 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
-
-    
     return [fileManager contentsAtPath:[cacheFileURL path]];
-    
 }
 
 -(NSURL *)asyncableCachesDirectory {
@@ -93,7 +92,7 @@
                                                     options:0
                                                       error:&error];
     
-    // remove any cache file older than CACHE_LONGEVITY
+    
     NSLog(@"ASYNCABLE: Purging Asyncable cache. Cached files before purge: %i", [caches count]);
     for (NSURL *cacheURL in caches) {
         if (fabs([[[fileManager attributesOfItemAtPath:[cacheURL path] error:&error] fileModificationDate] timeIntervalSinceNow]) > CACHE_LONGEVITY) {
@@ -106,7 +105,7 @@
                                            options:0
                                              error:&error];
     
-    // remove any cache file older than CACHE_LONGEVITY
+    
     NSLog(@"ASYNCABLE: Cached files after purge: %d", [caches count]);
 }
  
@@ -114,21 +113,40 @@
     NSFileManager *manager = [NSFileManager defaultManager];
     NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *cacheDirectory = [[cachePaths objectAtIndex:0] stringByAppendingString:@"/Asyncable"];
-    NSArray *cacheFileList;
-    NSEnumerator *cacheEnumerator;
+    
     NSString *cacheFilePath;
     NSError *error;
     unsigned long long int cacheFolderSize = 0;
     
-    cacheFileList = [manager subpathsAtPath:cacheDirectory];
-    cacheEnumerator = [cacheFileList objectEnumerator];
+    NSArray *cacheFileList = [manager subpathsAtPath:cacheDirectory];
+    NSLog(@"Cached file list ----- %@", cacheFileList);
+    NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
     while (cacheFilePath = [cacheEnumerator nextObject]) {
         NSDictionary *cacheFileAttributes = [manager attributesOfItemAtPath:[cacheDirectory stringByAppendingPathComponent:cacheFilePath] error:&error];
-        NSLog(@"Cached file attributes ----- %@", cacheFileAttributes);
         cacheFolderSize += [cacheFileAttributes fileSize];
     }
-    
     return cacheFolderSize;
+}
+
+- (void)checkAndDumpDiskMemory {
+    NSError *error;
+    NSFileManager *manager = [NSFileManager defaultManager];
+    NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cacheDirectory = [[cachePaths objectAtIndex:0] stringByAppendingString:@"/Asyncable"];
+    if ([self diskCacheFolderSize] > DISK_LIMIT) {
+        NSArray *cacheFileList = [manager subpathsAtPath:cacheDirectory];
+        
+        NSString *prefix = @"/";
+        NSString *fullFileName = [prefix stringByAppendingString:[cacheFileList objectAtIndex:1]];
+        NSString *fileToRemove = [cacheDirectory stringByAppendingString:fullFileName];
+        
+        [manager removeItemAtPath:fileToRemove error:&error];
+        
+        [self checkAndDumpDiskMemory];
+    }
+    else {
+        return;
+    }
 }
 
 @end
