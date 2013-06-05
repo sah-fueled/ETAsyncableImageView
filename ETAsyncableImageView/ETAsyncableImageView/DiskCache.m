@@ -15,7 +15,7 @@
 #define CACHE_LONGEVITY 86400  // DO NOT EDIT
 #endif
 
-#define DISK_LIMIT 150000 
+#define DISK_LIMIT 2*1024*1024 
 
 @implementation DiskCache
 
@@ -37,10 +37,18 @@
     if (self) {
         [self createCacheDirectory];
         [self clearStaleCaches];
+        [self checkAndDumpDiskMemory];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningNotification:)
+                                                     name:UIApplicationDidReceiveMemoryWarningNotification object:[UIApplication sharedApplication]];
     }
     
     return self;
 }
+
+-(void)didReceiveMemoryWarningNotification:(NSNotification *)notification {
+    
+}
+
 
 -(void)createCacheDirectory{
     NSError *error;
@@ -57,10 +65,12 @@
     
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     NSError *error = nil;
-    
     [data writeToURL:cacheFileURL options:0 error:&error];
     [self checkAndDumpDiskMemory];
-    [[MemoryCache sharedCache] setCache:data forKey:key];
+    if (data) {
+        [[MemoryCache sharedCache] setCache:data forKey:key];
+    }
+
 }
 
 -(NSData *)getCacheForKey:(NSString *)key {
@@ -108,6 +118,8 @@
     
     NSLog(@"ASYNCABLE: Cached files after purge: %d", [caches count]);
 }
+
+#pragma mark - Memory dumping methods
  
 - (unsigned long long int) diskCacheFolderSize {
     NSFileManager *manager = [NSFileManager defaultManager];
@@ -122,7 +134,8 @@
     NSLog(@"Cached file list ----- %@", cacheFileList);
     NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
     while (cacheFilePath = [cacheEnumerator nextObject]) {
-        NSDictionary *cacheFileAttributes = [manager attributesOfItemAtPath:[cacheDirectory stringByAppendingPathComponent:cacheFilePath] error:&error];
+        NSDictionary *cacheFileAttributes = [manager attributesOfItemAtPath:
+                                            [cacheDirectory stringByAppendingPathComponent:cacheFilePath] error:&error];
         cacheFolderSize += [cacheFileAttributes fileSize];
     }
     return cacheFolderSize;
@@ -137,10 +150,10 @@
         NSArray *cacheFileList = [manager subpathsAtPath:cacheDirectory];
         
         NSString *prefix = @"/";
-        NSString *fullFileName = [prefix stringByAppendingString:[cacheFileList objectAtIndex:1]];
-        NSString *fileToRemove = [cacheDirectory stringByAppendingString:fullFileName];
+        NSString *fileName = [prefix stringByAppendingString:[cacheFileList objectAtIndex:1]];
+        NSString *filePath = [cacheDirectory stringByAppendingString:fileName];
         
-        [manager removeItemAtPath:fileToRemove error:&error];
+        [manager removeItemAtPath:filePath error:&error];
         
         [self checkAndDumpDiskMemory];
     }

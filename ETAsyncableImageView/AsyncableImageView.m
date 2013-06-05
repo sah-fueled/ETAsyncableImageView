@@ -142,6 +142,7 @@
     
     self.activity.hidden = YES;
     [self.activity stopAnimating];
+    self.image = [UIImage imageNamed:@"Failed.png"];
     NSLog(@"Error in loading image");
     if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
         [self.delegate imageLoadingFinished];
