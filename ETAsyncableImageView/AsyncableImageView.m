@@ -9,6 +9,9 @@
 #import "AsyncableImageView.h"
 #import "ImageLoader.h"
 
+#define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
+#define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
+
 @interface AsyncableImageView()
 
 @property(nonatomic, strong) UIImage *maskImage;
@@ -44,38 +47,31 @@
 #pragma mark - public methods
 
 - (void)showImageFromURL:(NSString *)url{
-//    [self showImageFromURL:url withMaskImage:nil];
-    
     self.image = [UIImage imageWithContentsOfFile:url];
-    
     if (self.image) {
         [self imageLoaded];
     }
     else {
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
+      [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(imageLoaded)
-                                                     name:@"IMAGE_DOWNLOADED"
+                                                     name:kIMAGE_DOWNLOADED
                                                    object:self.imageLoader];
-        [[NSNotificationCenter defaultCenter] addObserver:self
+      
+      [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(imageLoadingFailed)
-                                                     name:@"IMAGE_DOWNLOAD_FAILED"
+                                                     name:kIMAGE_DOWNLOAD_FAILED
                                                    object:self.imageLoader];
-
-        self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
-        
-        if (!self.image) {
-            self.activity.hidden = NO;
-            [self.activity startAnimating];
-            
-            if(self.placeHolderImage)
-                self.image = self.placeHolderImage;
+      self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
+      if (!self.image) {
+        self.activity.hidden = NO;
+        [self.activity startAnimating];
+        if(self.placeHolderImage)
+          self.image = self.placeHolderImage;
         }
         else {
-            [self imageLoaded];
+          [self imageLoaded];
         }
     }
-
 }
 
 - (void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
@@ -95,7 +91,8 @@
 
 - (void)initializtion{
     
-    self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.activity = [[UIActivityIndicatorView alloc]
+                     initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     CGRect rect = self.activity.frame;
     rect.origin.x = (self.frame.size.width - rect.size.width)/2;
     rect.origin.y = (self.frame.size.height - rect.size.height)/2;

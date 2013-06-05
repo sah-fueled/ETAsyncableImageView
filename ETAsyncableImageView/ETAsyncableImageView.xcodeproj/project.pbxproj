@@ -148,6 +148,7 @@
 		6996AC5F175DE4D800059C44 /* Demo */ = {
 			isa = PBXGroup;
 			children = (
+				39911F0D175F704F0050808F /* Resources */,
 				6996AC57175DDB1500059C44 /* ViewController.h */,
 				6996AC58175DDB1500059C44 /* ViewController.m */,
 				6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */,
@@ -158,7 +159,6 @@
 		6996AC62175DE8DC00059C44 /* AsyncableHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				39911F0D175F704F0050808F /* Resources */,
 				6985BF6A175F1EC7007E0426 /* MemoryCache.h */,
 				6985BF6B175F1EC7007E0426 /* MemoryCache.m */,
 				6985BF6C175F1EC7007E0426 /* NSString+MD5.h */,

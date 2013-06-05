@@ -13,9 +13,12 @@
 #import "NSString+MD5.h"
 #import "ImageDownloader.h"
 
+#define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
+#define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
+
 typedef enum {
     AsyncableImageTypeUnknown = -1,
-    AsyncableImageTypeJPEG = 0,
+    AsyncableImageTypeJPEG,
     AsyncableImageTypePNG
 } AsyncableImageType;
 
@@ -30,8 +33,8 @@ typedef enum {
 
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
 
-
-- (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url ForImageView:(UIImageView *)imageView;
+- (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url
+                                                             ForImageView:(UIImageView *)imageView;
 - (void)storeImage:(UIImage*)image withURL:(NSString*)url;
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView;
 
@@ -41,49 +44,59 @@ typedef enum {
 @implementation ImageLoader
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
-
-    NSLog(@"-------------------------------------%lli", [DiskCache sharedCache].diskCacheFolderSize);
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
         self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
         if(self.image) break;
-	}
+    }
     return self.image;
-    
 }
+
 #pragma mark - Private methods
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
                               withURL:(NSString*)url
                          ForImageView:(UIImageView *)imageView {
- 
-    switch (dataSource) {
-        case DataSourceTypeMemoryCache:
-            self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
-            if (self.image) {
-                
-                return self.image;
-            }
-            break;
-        case DataSourceTypeDiskCache:
-            self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
-            if (self.image) {
-                
-                return self.image;
-            }
-            break;
-        case DataSourceTypeServer:
-            [self startImageDownloadingFromURL:url ForImageView:imageView];
-            break;
-            
-        default:
-            break;
+  
+    if (dataSource == DataSourceTypeMemoryCache) {
+        self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
     }
-   
+    else if(dataSource == DataSourceTypeDiskCache){
+        self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
+    }
+    else {
+        [self startImageDownloadingFromURL:url ForImageView:imageView];
+    }
+    return self.image;
+ 
+//    switch (dataSource) {
+//        case DataSourceTypeMemoryCache:
+//            self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
+//            if (self.image) {
+//                
+//                return self.image;
+//            }
+//            break;
+//        case DataSourceTypeDiskCache:
+//            self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
+//            if (self.image) {
+//                
+//                return self.image;
+//            }
+//            break;
+//        case DataSourceTypeServer:
+//            [self startImageDownloadingFromURL:url ForImageView:imageView];
+//            break;
+//            
+//        default:
+//            break;
+//    }
+  
     return self.image;
 }
 
 -(AsyncableImageType)imageTypeForJTDynamicImageURL:(NSURL *)url {
+    AsyncableImageType * imageType;
     NSError *error = nil;
     NSRegularExpression *jpegRegEx = [NSRegularExpression regularExpressionWithPattern:@".*\\.(jpg|jpeg)"
                                                                                options:NSRegularExpressionCaseInsensitive
@@ -97,33 +110,23 @@ typedef enum {
     NSRange fullRange = NSRangeFromString([NSString stringWithFormat:@"0,%d", [absoluteUrlString length]]);
     
     if ([jpegRegEx numberOfMatchesInString:absoluteUrlString options:0 range:fullRange] > 0) {
-        return AsyncableImageTypeJPEG;
+        imageType = AsyncableImageTypeJPEG;
     }
     if ([pngRegEx numberOfMatchesInString:absoluteUrlString options:0 range:fullRange] > 0) {
-        return AsyncableImageTypePNG;
+      imageType = AsyncableImageTypePNG;
     }
-    
-    return AsyncableImageTypeUnknown;
-    
-    
+    return imageType;
 }
 
 - (void)storeImage:(UIImage *)image withURL:(NSString *)url{
     
     NSData *imageData = nil;
-    
-    switch ([self imageTypeForJTDynamicImageURL:[NSURL URLWithString:url]]) {
-        case AsyncableImageTypeJPEG:
-            imageData = UIImageJPEGRepresentation(image, 1);
-            break;
-        case AsyncableImageTypePNG:
-            imageData = UIImagePNGRepresentation(image);
-            break;
-        default:
-        	imageData = UIImagePNGRepresentation(image);
-            break;
+  
+    if ([self imageTypeForJTDynamicImageURL:[NSURL URLWithString:url]] == AsyncableImageTypeJPEG) {
+        imageData = UIImageJPEGRepresentation(image, 1);
+    } else {
+        imageData = UIImagePNGRepresentation(image);
     }
-    
     [[DiskCache sharedCache] setCache:imageData forKey:[url MD5]];
 }
 
@@ -139,7 +142,8 @@ typedef enum {
 }
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
-    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url delegate:self];
+    ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
+                                                                   delegate:self];
     [self.downloadQueue addOperation:imageDownloader];
 }
 
@@ -147,14 +151,15 @@ typedef enum {
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
     self.image = downloader.image;
+    NSString * notificationName;
     if (self.image) {
-       [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOADED" object:self]; 
+      notificationName = kIMAGE_DOWNLOADED;
     }
     else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOAD_FAILED" object:self];
+      notificationName = kIMAGE_DOWNLOAD_FAILED;
     }
-    [self storeImage:self.image withURL:downloader.url];
-    NSLog(@"Disk Size %lli", [DiskCache sharedCache].diskCacheFolderSize);
+   [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
+   [self storeImage:self.image withURL:downloader.url];
 }
 
 @end

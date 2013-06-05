@@ -10,8 +10,6 @@
 
 @interface ImageDownloader ()
 
-//@property (nonatomic, strong) NSString *url;
-
 @property (nonatomic, strong)NSData *responseData;
 
 @end

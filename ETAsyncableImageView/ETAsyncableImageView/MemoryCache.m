@@ -16,7 +16,7 @@
 
 @implementation MemoryCache
 
-+(MemoryCache*) sharedCache{
++(MemoryCache*) sharedCache {
    
     static dispatch_once_t predicate;
     __strong static MemoryCache *sharedCache = nil;
@@ -31,28 +31,19 @@
 -(id)init {
     
     self = [super init];
-    
     if (self) {
-        
         self.cache = [[NSCache alloc] init];
     }
-    
     return self;
 }
 
 
 -(id)getCacheForKey:(NSString *)key {
-    
     return [self.cache objectForKey:key];
-    
-}
+  }
 
 - (void)setCache:(NSData *)data forKey:(NSString *)key{
     [self.cache setObject:data forKey:key];
-
 }
 
-//-(BOOL) isEmpty{
-//    self.cache co
-//}
 @end

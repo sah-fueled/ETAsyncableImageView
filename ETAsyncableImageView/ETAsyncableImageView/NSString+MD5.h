@@ -1,9 +1,9 @@
 //
 //  NSString+MD5.h
-//  JackThreads
+//  plb-fueled
 //
-//  Created by devk on 12/10/11.
-//  Copyright (c) 2011 Ophio. All rights reserved.
+//  Created by plb-fueled on 04/06/13.
+//  Copyright (c) 2013 fueled.co. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

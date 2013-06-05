@@ -12,6 +12,7 @@
 @interface ImageLoader : NSObject
 
 @property (nonatomic, strong) UIImage *image;
+
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
 
 @end

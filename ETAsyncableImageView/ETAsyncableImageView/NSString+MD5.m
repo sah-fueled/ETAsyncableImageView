@@ -1,9 +1,9 @@
 //
-//  NSString+MD5.m
-//  JackThreads
+//  NSString+MD5.h
+//  plb-fueled
 //
-//  Created by devk on 12/10/11.
-//  Copyright (c) 2011 Ophio. All rights reserved.
+//  Created by plb-fueled on 04/06/13.
+//  Copyright (c) 2013 fueled.co. All rights reserved.
 //
 
 #import "NSString+MD5.h"
@@ -24,7 +24,8 @@
     CC_MD5(ptr, strlen(ptr), md5Buffer);
     
     // Convert MD5 value in the buffer to NSString of hex values
-    NSMutableString *output = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    NSMutableString *output = [NSMutableString
+                               stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
     for(int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) 
         [output appendFormat:@"%02x",md5Buffer[i]];
     

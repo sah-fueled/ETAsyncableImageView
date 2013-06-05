@@ -11,8 +11,11 @@
 @interface DiskCache : NSObject
 
 +(DiskCache *) sharedCache;
+
 -(void)setCache:(NSData *)data forKey:(NSString *)key;
+
 -(NSData *)getCacheForKey:(NSString *)key;
+
 - (unsigned long long int) diskCacheFolderSize;
 
 @end
