@@ -15,7 +15,7 @@
 #define CACHE_LONGEVITY 86400  // DO NOT EDIT
 #endif
 
-#define DISK_LIMIT 150000 
+#define DISK_LIMIT 20*1024*1024
 
 @implementation DiskCache
 
@@ -68,7 +68,11 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
-    return [fileManager contentsAtPath:[cacheFileURL path]];
+    NSData *data = [fileManager contentsAtPath:[cacheFileURL path]];
+    
+    if(data)
+       [[MemoryCache sharedCache] setCache: data forKey:key];
+    return data;
 }
 
 -(NSURL *)asyncableCachesDirectory {

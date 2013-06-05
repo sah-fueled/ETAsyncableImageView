@@ -52,4 +52,7 @@
 
 }
 
+//-(BOOL) isEmpty{
+//    self.cache co
+//}
 @end

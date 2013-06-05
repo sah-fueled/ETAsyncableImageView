@@ -14,5 +14,6 @@
 
 -(void)setCache:(NSData *)data forKey:(NSString *)key;
 -(NSData *)getCacheForKey:(NSString *)key;
+-(BOOL) isEmpty;
 
 @end
