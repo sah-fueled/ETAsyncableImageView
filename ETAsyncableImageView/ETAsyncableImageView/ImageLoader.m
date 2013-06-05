@@ -29,7 +29,7 @@ typedef enum {
 @interface ImageLoader () <ImageDownloaderDelegate>
 
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
-@property (nonatomic, strong) UIImage *image;
+
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url ForImageView:(UIImageView *)imageView;
 - (void)storeImage:(UIImage*)image withURL:(NSString*)url;
@@ -138,6 +138,8 @@ typedef enum {
 #pragma mark - ImageDownloaderDelegate method
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
+    self.image = downloader.image;
+    NSLog(@"image = %@ %@",self.image,downloader.image);
     [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOADED" object:self];
      
 }

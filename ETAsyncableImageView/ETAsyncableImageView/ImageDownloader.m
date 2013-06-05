@@ -29,7 +29,7 @@
 
 - (void)main {
     
-    @autoreleasepool {
+ /*   @autoreleasepool {
         if (self.isCancelled)
             return;
         
@@ -47,7 +47,27 @@
 //        if (self.isCancelled)
 //            return;
 //        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
+    }*/
+    
+    @autoreleasepool {
+        if (self.isCancelled)
+            return;
+        
+        NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.url]];
+        if (self.isCancelled) {
+            imageData = nil;
+            return;
+        }
+        if (imageData) {
+            UIImage *downloadedImage = [UIImage imageWithData:imageData];
+            self.image = downloadedImage;
+        }
+        imageData = nil;
+        if (self.isCancelled)
+            return;
+        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
     }
+
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

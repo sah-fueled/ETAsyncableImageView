@@ -15,13 +15,13 @@
 
 @interface AsyncableImageView : UIImageView {
     
-    UIActivityIndicatorView *activity;
+//    UIActivityIndicatorView *activity;
     id<AsyncableImageViewdelegate> delegate;
     
 }
 
 @property(nonatomic, weak)id<AsyncableImageViewdelegate> delegate;
-@property(nonatomic, strong)UIActivityIndicatorView *activity;
+
 
 -(void)showImageFromURL:(NSString *)url;
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage;

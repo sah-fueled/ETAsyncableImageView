@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "AsyncableImageView.h"
 
-#define kSampleDataUrl @"http://a1408.g.akamai.net/5/1408/1388/2005110404/1a1a1ad948be278cff2d96046ad90768d848b41947aa1986/sample_mpeg2.m2v.zip"
+#define kSampleDataUrl @"https://d2rfichhc2fb9n.cloudfront.net/image/5/zbW7sjp-VvL0OPvIB_MGvRsU2AZ7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvZWIvNzIvNDAvZWI3MjQwMDAwMDAwMDAwMC5wbmciLCJvIjoiIn0"
 #define kPlaceholderImage @"Placeholder"
 
 @interface ViewController () <UITableViewDelegate,UITableViewDataSource>
