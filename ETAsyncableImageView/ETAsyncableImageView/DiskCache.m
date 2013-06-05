@@ -55,6 +55,7 @@
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *urlHash = [key MD5];
+    NSLog(@"urlhash => %@", urlHash);
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:urlHash];
     
     return [fileManager contentsAtPath:[cacheFileURL path]];

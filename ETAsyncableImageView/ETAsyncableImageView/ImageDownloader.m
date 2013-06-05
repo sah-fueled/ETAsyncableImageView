@@ -9,19 +9,22 @@
 #import "ImageDownloader.h"
 
 @interface ImageDownloader () 
+<<<<<<< HEAD
 @property (nonatomic, strong) NSString *url;
+=======
+
+>>>>>>> origin/NSOperations
 @property (nonatomic, strong)NSData *responseData;
 
 @end
 
 @implementation ImageDownloader
 
-- (id)initWithURL:(NSString *)url ImageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate {
+- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate {
     
     if (self = [super init]) {
         self.url = url;
-        self.imageView = imageView;
-        self.delegate = delegate;
+       self.delegate = delegate;
     }
     return self;
 }
@@ -46,26 +49,6 @@
             return;
         [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
     }
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	self.responseData = [NSData data];
-	
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	self.responseData  = data;
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    UIImage *downloadedImage = [UIImage imageWithData:self.responseData];
-    self.imageView.image = downloadedImage;
-    
-    [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    
 }
 
 @end
