@@ -12,8 +12,9 @@
 @interface AsyncableImageView()
 
 @property(nonatomic, strong) UIImage *maskImage;
+@property(nonatomic, strong) UIImage *placeHolderImage;
 @property(nonatomic, strong) ImageLoader *imageLoader;
-@property(nonatomic, strong)UIActivityIndicatorView *activity;
+@property(nonatomic, strong) UIActivityIndicatorView *activity;
 
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage;
 
@@ -25,15 +26,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
-        self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        CGRect rect = self.activity.frame;
-        rect.origin.x = (self.frame.size.width - rect.size.width)/2;
-        rect.origin.y = (self.frame.size.height - rect.size.height)/2;
-        self.activity.frame = rect;
-        self.activity.hidden = YES;
-        [self addSubview:self.activity];
-        _imageLoader = [[ImageLoader alloc]init];
+        [self initializtion];
     }
     return self;
 }
@@ -43,70 +36,72 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        CGRect rect = self.activity.frame;
-        rect.origin.x = (self.frame.size.width - rect.size.width)/2;
-        rect.origin.y = (self.frame.size.height - rect.size.height)/2;
-        self.activity.frame = rect;
-        self.activity.hidden = YES;
-        [self addSubview:self.activity];
-        _imageLoader = [[ImageLoader alloc]init];
+        [self initializtion];
     }
     return self;
 }
 
--(void)showImageFromURL:(NSString *)url{
-    [self showImageFromURL:url withMaskImage:nil];
-}
+#pragma mark - public methods
 
--(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
-    self.maskImage = maskImage;
+- (void)showImageFromURL:(NSString *)url{
+//    [self showImageFromURL:url withMaskImage:nil];
+    
     self.image = [UIImage imageWithContentsOfFile:url];
     
     if (self.image) {
         [self imageLoaded];
     }
     else {
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoaded)
                                                      name:@"IMAGE_DOWNLOADED" object:self.imageLoader];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoadingFailed)
                                                      name:@"IMAGE_DOWNLOAD_FAILED" object:self.imageLoader];
+
+
+        
+
         self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
+        
         if (!self.image) {
             self.activity.hidden = NO;
             [self.activity startAnimating];
+            
+            if(self.placeHolderImage)
+                self.image = self.placeHolderImage;
         }
         else {
             [self imageLoaded];
         }
     }
+
 }
 
--(void)imageLoaded{
-    
-    self.activity.hidden = YES;
-    [self.activity stopAnimating];
-    NSLog(@"image Loaded");
-    self.image = self.imageLoader.image;
-    
-    if ([delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-        [delegate imageLoadingFinished];
-    }
+- (void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
+    self.maskImage = maskImage;
+    [self showImageFromURL:url];
+    self.image = [self maskImage:self.image withMask:self.maskImage];
+}
+
+- (void)showImageFromURL:(NSString *)url
+    withPlaceHolderImage:(UIImage *)placeHolderImage{
+    self.placeHolderImage = placeHolderImage;
+    [self showImageFromURL:url];
     
 }
 
--(void)imageLoadingFailed{
+#pragma mark - private methods
+
+- (void)initializtion{
     
+    self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    CGRect rect = self.activity.frame;
+    rect.origin.x = (self.frame.size.width - rect.size.width)/2;
+    rect.origin.y = (self.frame.size.height - rect.size.height)/2;
+    self.activity.frame = rect;
     self.activity.hidden = YES;
-    [self.activity stopAnimating];
-    
-    //self.image = [UIImage imageNamed:@"broken-image.png"];
-    
-    if ([delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-        [delegate imageLoadingFinished];
-    }
-    
-    
+    [self addSubview:self.activity];
+    _imageLoader = [[ImageLoader alloc]init];
 }
 
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage {
@@ -127,6 +122,30 @@
     CFRelease(mask);
     
 	return img;
+    
+}
+
+- (void)imageLoaded{
+    
+    self.activity.hidden = YES;
+    [self.activity stopAnimating];
+    self.image = self.imageLoader.image;
+    
+    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+        [self.delegate imageLoadingFinished];
+    }
+    
+}
+
+-(void)imageLoadingFailed{
+    
+    self.activity.hidden = YES;
+    [self.activity stopAnimating];
+    NSLog(@"error");
+    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+        [self.delegate imageLoadingFinished];
+    }
+    
     
 }
 

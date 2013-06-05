@@ -8,7 +8,9 @@
 
 #import "ImageDownloader.h"
 
-@interface ImageDownloader () 
+@interface ImageDownloader ()
+
+//@property (nonatomic, strong) NSString *url;
 
 @property (nonatomic, strong)NSData *responseData;
 
@@ -45,7 +47,6 @@
             return;
         [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
     }
-
 }
 
 @end
