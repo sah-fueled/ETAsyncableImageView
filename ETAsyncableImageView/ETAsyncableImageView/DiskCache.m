@@ -78,7 +78,11 @@
     NSFileManager *fileManager = [NSFileManager defaultManager];
 
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
-    return [fileManager contentsAtPath:[cacheFileURL path]];
+    NSData *data = [fileManager contentsAtPath:[cacheFileURL path]];
+    
+    if(data)
+       [[MemoryCache sharedCache] setCache: data forKey:key];
+    return data;
 }
 
 -(NSURL *)asyncableCachesDirectory {
