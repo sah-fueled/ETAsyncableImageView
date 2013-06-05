@@ -25,15 +25,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code
-        self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        CGRect rect = self.activity.frame;
-        rect.origin.x = (self.frame.size.width - rect.size.width)/2;
-        rect.origin.y = (self.frame.size.height - rect.size.height)/2;
-        self.activity.frame = rect;
-        self.activity.hidden = YES;
-        [self addSubview:self.activity];
-        _imageLoader = [[ImageLoader alloc]init];
+        [self initializtion];
     }
     return self;
 }
@@ -43,23 +35,18 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        CGRect rect = self.activity.frame;
-        rect.origin.x = (self.frame.size.width - rect.size.width)/2;
-        rect.origin.y = (self.frame.size.height - rect.size.height)/2;
-        self.activity.frame = rect;
-        self.activity.hidden = YES;
-        [self addSubview:self.activity];
-        _imageLoader = [[ImageLoader alloc]init];
+        [self initializtion];
     }
     return self;
 }
 
--(void)showImageFromURL:(NSString *)url{
+#pragma mark - public methods
+
+- (void)showImageFromURL:(NSString *)url{
     [self showImageFromURL:url withMaskImage:nil];
 }
 
--(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
+- (void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;
     self.image = [UIImage imageWithContentsOfFile:url];
     
@@ -67,8 +54,10 @@
         [self imageLoaded];
     }
     else {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageLoaded)
-                                                     name:@"IMAGE_DOWNLOADED" object:self.imageLoader];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(imageLoaded)
+                                                     name:@"IMAGE_DOWNLOADED"
+                                                   object:self.imageLoader];
         [self.imageLoader loadImageWithURL:url ForImageView:self];
         if (!self.image) {
             self.activity.hidden = NO;
@@ -77,7 +66,12 @@
     }
 }
 
--(void)imageLoaded{
+- (void)showImageFromURL:(NSString *)url
+    withPlaceHolderImage:(UIImage *)placeHolderImage{
+    
+    self.image = placeHolderImage;
+}
+- (void)imageLoaded{
     
     self.activity.hidden = YES;
     [self.activity stopAnimating];
@@ -97,8 +91,8 @@
     
     //self.image = [UIImage imageNamed:@"broken-image.png"];
     
-    if ([delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-        [delegate imageLoadingFinished];
+    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+        [self.delegate imageLoadingFinished];
     }
     
     
@@ -123,6 +117,20 @@
     
 	return img;
     
+}
+
+#pragma mark - private methods
+
+- (void)initializtion{
+    
+    self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    CGRect rect = self.activity.frame;
+    rect.origin.x = (self.frame.size.width - rect.size.width)/2;
+    rect.origin.y = (self.frame.size.height - rect.size.height)/2;
+    self.activity.frame = rect;
+    self.activity.hidden = YES;
+    [self addSubview:self.activity];
+    _imageLoader = [[ImageLoader alloc]init];
 }
 
 @end

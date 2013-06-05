@@ -8,8 +8,7 @@
 
 #import "ImageDownloader.h"
 
-@interface ImageDownloader () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
-
+@interface ImageDownloader () 
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, strong)NSData *responseData;
 
@@ -29,26 +28,6 @@
 
 - (void)main {
     
- /*   @autoreleasepool {
-        if (self.isCancelled)
-            return;
-        
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:15];
-        [NSURLConnection connectionWithRequest:request delegate:self];
-//        if (self.isCancelled) {
-//            imageData = nil;
-//            return;
-//        }
-//        if (imageData) {
-//            UIImage *downloadedImage = [UIImage imageWithData:imageData];
-//            self.imageView.image = downloadedImage;
-//        }
-//        imageData = nil;
-//        if (self.isCancelled)
-//            return;
-//        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
-    }*/
-    
     @autoreleasepool {
         if (self.isCancelled)
             return;
@@ -67,7 +46,6 @@
             return;
         [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
     }
-
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {

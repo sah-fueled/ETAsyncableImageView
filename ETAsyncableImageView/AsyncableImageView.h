@@ -8,23 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-
-
-
 @protocol AsyncableImageViewdelegate;
 
-@interface AsyncableImageView : UIImageView {
-    
-//    UIActivityIndicatorView *activity;
-    id<AsyncableImageViewdelegate> delegate;
-    
-}
+@interface AsyncableImageView : UIImageView
 
 @property(nonatomic, weak)id<AsyncableImageViewdelegate> delegate;
 
-
 -(void)showImageFromURL:(NSString *)url;
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage;
+-(void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *) placeHolderImage;
 
 @end
 

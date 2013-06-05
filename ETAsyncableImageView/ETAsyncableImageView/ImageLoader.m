@@ -41,14 +41,13 @@ typedef enum {
 @implementation ImageLoader
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
-    UIImage *image;
     
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
-        image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
-        if(image) break;
+        self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
+        if(self.image) break;
     }
-    return image;
+    return self.image;
     
 }
 #pragma mark - Private methods
