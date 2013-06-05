@@ -42,15 +42,12 @@ typedef enum {
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
 
-    UIImage *image;
-     NSLog(@"folder size %lli",[DiskCache sharedCache].diskCacheFolderSize);
+    
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
-        image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
-        if(image){
-            return image;
-        }
-    }
+        self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
+        if(self.image) break;
+	}
     return self.image;
     
 }
@@ -62,14 +59,16 @@ typedef enum {
  
     switch (dataSource) {
         case DataSourceTypeMemoryCache:
-            self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:url]];
+            self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
             if (self.image) {
+                
                 return self.image;
             }
             break;
         case DataSourceTypeDiskCache:
-            self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:url]];
+            self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
             if (self.image) {
+                
                 return self.image;
             }
             break;
@@ -125,7 +124,7 @@ typedef enum {
             break;
     }
     
-    [[DiskCache sharedCache] setCache:imageData forKey:url];
+    [[DiskCache sharedCache] setCache:imageData forKey:[url MD5]];
 }
 
 #pragma mark - NSOperation Methods
@@ -155,6 +154,7 @@ typedef enum {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"IMAGE_DOWNLOAD_FAILED" object:self];
     }
     [self storeImage:self.image withURL:downloader.url];
+    NSLog(@"Disk Size %lli", [DiskCache sharedCache].diskCacheFolderSize);
 }
 
 @end

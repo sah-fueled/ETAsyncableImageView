@@ -7,7 +7,6 @@
 //
 
 #import "MemoryCache.h"
-#import "NSString+MD5.h"
 
 @interface MemoryCache()
 
