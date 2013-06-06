@@ -11,7 +11,10 @@
 @interface QueueManager : NSObject
 
 @property (nonatomic) NSOperationQueue *globalQueue;
+@property (nonatomic, strong) NSMutableArray *downloadsInProgress;
+@property (nonatomic, strong) NSMutableArray *downloadsInWaiting;
 
 + (QueueManager *)sharedInstance;
+- (void)manageOperations;
 
 @end

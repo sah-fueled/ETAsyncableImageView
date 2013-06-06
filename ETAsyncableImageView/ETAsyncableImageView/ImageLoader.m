@@ -108,17 +108,15 @@ typedef enum {
 
 #pragma mark - NSOperation Methods
 
-- (NSOperationQueue *)downloadQueue {
-    QueueManager * queueManager = [QueueManager sharedInstance];
-    NSOperationQueue *globalQueue = queueManager.globalQueue;
-    return globalQueue;
-}
-
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
     ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
+                                                                  imageView:imageView
                                                                    delegate:self];
-    [self.downloadQueue addOperation:imageDownloader];
-  NSLog(@"queue count ==> %i", [self.downloadQueue operationCount]);
+  
+  [[QueueManager sharedInstance].downloadsInProgress addObject:imageDownloader];
+  [[QueueManager sharedInstance].globalQueue addOperation:imageDownloader];
+    
+  //NSLog(@"queue count ==> %i", [[QueueManager sharedInstance].downloadsInProgress count]);
 }
 
 #pragma mark - ImageDownloaderDelegate method
@@ -132,8 +130,16 @@ typedef enum {
     else {
       notificationName = kIMAGE_DOWNLOAD_FAILED;
     }
+   [[QueueManager sharedInstance].downloadsInProgress removeObject:downloader];
+  [[QueueManager sharedInstance].downloadsInWaiting removeObject:downloader];
+  NSLog(@"Remove queue count ==> %i", [[QueueManager sharedInstance].downloadsInProgress count]);
    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
    [self storeImage:self.image withURL:downloader.url];
+}
+
+- (void)imageDownloaderDidCancel:(ImageDownloader *)downloader {
+  [[QueueManager sharedInstance].downloadsInWaiting addObject:downloader];
+  [[NSNotificationCenter defaultCenter] postNotificationName:@"Download_Cancel" object:self];
 }
 
 @end

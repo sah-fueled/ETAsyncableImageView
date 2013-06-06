@@ -12,15 +12,17 @@
 
 @property (nonatomic, strong)NSData *responseData;
 
+
 @end
 
 @implementation ImageDownloader
 
-- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate {
+- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate {
     
     if (self = [super init]) {
         self.url = url;
-       self.delegate = delegate;
+        self.imageView = imageView;
+        self.delegate = delegate;
     }
     return self;
 }
@@ -28,10 +30,11 @@
 - (void)main {
     
     @autoreleasepool {
-        if (self.isCancelled)
+      if (self.isCancelled)
             return;
         
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.url]];
+      //[self checkForNullView];
         if (self.isCancelled) {
             imageData = nil;
             return;
@@ -41,10 +44,18 @@
             self.image = downloadedImage;
         }
         imageData = nil;
+      //[self checkForNullView];
         if (self.isCancelled)
             return;
         [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
     }
 }
+
+//- (void)checkForNullView {
+//  if (!self.imageView.window) {
+//    [self cancel];
+//    [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:) withObject:self waitUntilDone:NO];
+//  }
+//}
 
 @end

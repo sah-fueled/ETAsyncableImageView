@@ -10,7 +10,7 @@
 #import "AsyncableImageView.h"
 
 #define url1 @"https://d2rfichhc2fb9n.cloudfront.net/image/5/zbW7sjp-VvL0OPvIB_MGvRsU2AZ7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvZWIvNzIvNDAvZWI3MjQwMDAwMDAwMDAwMC5wbmciLCJvIjoiIn0"
-#define url2 @"https://d2rfichhc2fb9n.cloudfront.net/image/5/uP88TRPv7rIo3YLRhkgpyc6T6dF7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvM2IvZGMvMzAvM2JkYzMwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0"
+#define url2 @"https://d2rfichhc2fb9n.cloudfront.net/image/5/I4A0KmLjCexgfFfwO_zHsOf7_RN7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvNGYvODAvMTAvNGY4MDEwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0"
 #define kPlaceholderImage @"Placeholder"
 
 @interface ImageViewController ()

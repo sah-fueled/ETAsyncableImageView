@@ -8,6 +8,7 @@
 
 #import "AsyncableImageView.h"
 #import "ImageLoader.h"
+#import "QueueManager.h"
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
@@ -61,6 +62,12 @@
                                                  selector:@selector(imageLoadingFailed)
                                                      name:kIMAGE_DOWNLOAD_FAILED
                                                    object:self.imageLoader];
+      
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                               selector:@selector(imageLoadingFailed)
+                                                   name:@"Download_Cancel"
+       
+                                                 object:self.imageLoader];
       self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
       if (!self.image) {
         self.activity.hidden = NO;
@@ -144,8 +151,10 @@
     if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
         [self.delegate imageLoadingFinished];
     }
-    
-    
+}
+
+- (void)didMoveToWindow {
+  [[QueueManager sharedInstance] manageOperations];
 }
 
 @end

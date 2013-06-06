@@ -7,6 +7,7 @@
 //
 
 #import "QueueManager.h"
+#import "ImageDownloader.h"
 
 @implementation QueueManager
 
@@ -26,9 +27,38 @@
   self = [super init];
   if (self)
     {
-    self.globalQueue = [[NSOperationQueue alloc] init];
+      _globalQueue = [[NSOperationQueue alloc] init];
+      [_globalQueue setMaxConcurrentOperationCount:5];
+       _downloadsInProgress = [[NSMutableArray alloc] init];
+       _downloadsInWaiting = [[NSMutableArray alloc] init];
     }
   return self;
+}
+
+- (void)manageOperations {
+  for (ImageDownloader *operation in self.downloadsInProgress) {
+    if (!operation.imageView.window) {
+      [operation cancel];
+      [self.downloadsInWaiting addObject:operation];
+    }
+  }
+  NSMutableArray *collecter = [[NSMutableArray alloc]initWithObjects:nil];
+ 
+  
+  NSLog(@"waiting count =========> %i", [self.downloadsInWaiting count]);
+  for (ImageDownloader *waitingOperation in self.downloadsInWaiting) {
+    if (waitingOperation.imageView.window) {
+      for (ImageDownloader *opertion in self.globalQueue.operations) {
+        if (waitingOperation == opertion) {
+          [collecter addObject:waitingOperation];
+        }
+        else if (!waitingOperation.isExecuting && waitingOperation != opertion){
+          [self.globalQueue addOperation:waitingOperation];
+        }
+      }
+    }
+  }
+  [self.downloadsInWaiting removeObjectsInArray:collecter];
 }
 
 @end
