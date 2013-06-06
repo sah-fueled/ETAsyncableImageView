@@ -15,12 +15,12 @@
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, assign) id <ImageDownloaderDelegate> delegate;
-- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate;
+- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate;
 
 @end
 
 @protocol ImageDownloaderDelegate <NSObject>
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader;
-
+- (void)imageDownloaderDidCancel:(ImageDownloader *)downloader;
 @end

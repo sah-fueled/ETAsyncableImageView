@@ -7,7 +7,8 @@
 //
 
 #import "AsyncableImageView.h"
-#import "ImageLoader.h"
+#import "AsyncableImageLoader.h"
+#import "ImageLoader.h" 
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
@@ -17,6 +18,7 @@
 @property(nonatomic, strong) UIImage *maskImage;
 @property(nonatomic, strong) UIImage *placeHolderImage;
 @property(nonatomic, strong) ImageLoader *imageLoader;
+//@property(nonatomic, strong) AsyncableImageLoader *imageLoader;
 @property(nonatomic, strong) UIActivityIndicatorView *activity;
 
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage;
@@ -44,7 +46,7 @@
     return self;
 }
 
-#pragma mark - public methods
+//#pragma mark - public methods
 
 - (void)showImageFromURL:(NSString *)url{
     self.image = [UIImage imageWithContentsOfFile:url];
@@ -61,6 +63,12 @@
                                                  selector:@selector(imageLoadingFailed)
                                                      name:kIMAGE_DOWNLOAD_FAILED
                                                    object:self.imageLoader];
+        
+      [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(imageLoadingCancelled)
+                                                     name:@"Download_Canceled"
+                                                   object:self.imageLoader];
+        
       self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
       if (!self.image) {
         self.activity.hidden = NO;
@@ -99,7 +107,9 @@
     self.activity.frame = rect;
     self.activity.hidden = YES;
     [self addSubview:self.activity];
+//    _imageLoader = [AsyncableImageLoader sharedLoader];
     _imageLoader = [[ImageLoader alloc]init];
+//    _imageLoader = [[AsyncableImageLoader alloc]init];
 }
 
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage {
@@ -147,5 +157,10 @@
     
     
 }
+-(void)imageLoadingCancelled{
+    self.activity.hidden = YES;
+    [self.activity stopAnimating];
+     NSLog(@"Loading image cancelled");
 
+}
 @end

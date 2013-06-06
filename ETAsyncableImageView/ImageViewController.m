@@ -28,8 +28,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-      _image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 200.0)];
-      _image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 200.0)];
+      _image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 150.0)];
+      _image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 150.0)];
         // Custom initialization
     }
     return self;
@@ -39,8 +39,8 @@
 {
   [super viewDidLoad];
   
-  self.image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 200.0)];
-  self.image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 200.0)];
+  self.image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 150.0)];
+  self.image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 150.0)];
   [self.view addSubview:self.image1];
   [self.view addSubview:self.image2];
   

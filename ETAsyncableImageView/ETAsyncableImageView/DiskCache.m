@@ -7,7 +7,7 @@
 //
 
 #import "DiskCache.h"
-#import "MemoryCache.h"
+//#import "MemoryCache.h"
 
 #ifdef DEBUG
 #define CACHE_LONGEVITY 86400
@@ -15,7 +15,7 @@
 #define CACHE_LONGEVITY 86400  
 #endif
 
-#define DISK_LIMIT 2*1024*1024 
+#define DISK_LIMIT 20*1024*1024 
 
 @implementation DiskCache
 
@@ -75,18 +75,13 @@
     NSError *error = nil;
     [data writeToURL:cacheFileURL options:0 error:&error];
     [self checkAndDumpDiskMemory];
-    if (data) {
-        [[MemoryCache sharedCache] setCache:data forKey:key];
-    }
-
+    
 }
 
 -(NSData *)getCacheForKey:(NSString *)key {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     NSData *data = [fileManager contentsAtPath:[cacheFileURL path]];
-    if(data)
-       [[MemoryCache sharedCache] setCache: data forKey:key];
     return data;
 }
 

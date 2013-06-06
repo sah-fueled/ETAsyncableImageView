@@ -11,16 +11,18 @@
 @interface ImageDownloader ()
 
 @property (nonatomic, strong)NSData *responseData;
+@property (nonatomic, strong)UIImageView *imageView;
 
 @end
 
 @implementation ImageDownloader
 
-- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate {
+- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate {
     
     if (self = [super init]) {
         self.url = url;
-       self.delegate = delegate;
+        self.imageView = imageView;
+        self.delegate = delegate;
     }
     return self;
 }
@@ -36,6 +38,12 @@
             imageData = nil;
             return;
         }
+        if (!self.imageView.window) {
+            [self cancel];
+            [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:)
+                                                        withObject:self
+                                                      waitUntilDone:NO];
+       }
         if (imageData) {
             UIImage *downloadedImage = [UIImage imageWithData:imageData];
             self.image = downloadedImage;
@@ -43,7 +51,9 @@
         imageData = nil;
         if (self.isCancelled)
             return;
-        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
+        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:)
+                                                    withObject:self
+                                                 waitUntilDone:NO];
     }
 }
 
