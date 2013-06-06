@@ -21,6 +21,7 @@
     if (self = [super init]) {
         self.url = url;
        self.delegate = delegate;
+//        NSLog(@"loader url = %@",url);
     }
     return self;
 }
@@ -34,6 +35,7 @@
         NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.url]];
         if (self.isCancelled) {
             imageData = nil;
+            [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:) withObject:self waitUntilDone:NO];
             return;
         }
         if (imageData) {
@@ -41,8 +43,11 @@
             self.image = downloadedImage;
         }
         imageData = nil;
-        if (self.isCancelled)
+        if (self.isCancelled){
+        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:) withObject:self waitUntilDone:NO];
             return;
+        }
+            
         [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:) withObject:self waitUntilDone:NO];
     }
 }

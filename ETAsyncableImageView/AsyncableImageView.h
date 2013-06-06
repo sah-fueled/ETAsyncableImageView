@@ -17,6 +17,10 @@
 -(void)showImageFromURL:(NSString *)url;
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage;
 -(void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *) placeHolderImage;
+-(void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *) placeHolderImage loadInBackground:(BOOL) backgroundLoadingEnabled;
++(void) cancelLoadingImages;
+
+
 
 @end
 

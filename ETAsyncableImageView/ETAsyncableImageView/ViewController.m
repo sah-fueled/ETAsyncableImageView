@@ -27,7 +27,7 @@
     @"https://d2rfichhc2fb9n.cloudfront.net/image/5/5QvP1Gy77PqwQeR99vA701bi0Lt7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvZGEvZGMvMzAvZGFkYzMwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0",
     @"https://d2rfichhc2fb9n.cloudfront.net/image/5/zbW7sjp-VvL0OPvIB_MGvRsU2AZ7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvZWIvNzIvNDAvZWI3MjQwMDAwMDAwMDAwMC5wbmciLCJvIjoiIn0",
     @"https://d2rfichhc2fb9n.cloudfront.net/image/5/uP88TRPv7rIo3YLRhkgpyc6T6dF7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvM2IvZGMvMzAvM2JkYzMwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0",
-    @"123https://d2rfichhc2fb9n.cloudfront.net/image/5/EQB6rJetQ3YuJwS5Hjq7GhHlzRh7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvNzQvOTQvNDAvNzQ5NDQwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0",
+    @"https://d2rfichhc2fb9n.cloudfront.net/image/5/EQB6rJetQ3YuJwS5Hjq7GhHlzRh7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvNzQvOTQvNDAvNzQ5NDQwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0",
     @"https://d2rfichhc2fb9n.cloudfront.net/image/5/Xmwn_30UZf-jyownq-7C29MgjH17InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvMTIvMmUvMTAvMTIyZTEwMDAwMDAwMDAwMC5qcGciLCJvIjoiIn0",
     @"https://d2rfichhc2fb9n.cloudfront.net/image/5/kZ-JRmTbmd3WVPswTJ8Nwxzkf917InMiOiJzMyIsImIiOiJ0YXBwLWFzc2V0cyIsImsiOiJpL1UvaS9ZL1VpWW5xRFNvTUtyTEhLNXA0OHN2NkxmTmRVMC5qcGciLCJvIjoiIn0",
     @"https://d2rfichhc2fb9n.cloudfront.net/image/5/VFP0digCcEMrdQEh4teTZXZrlNN7InMiOiJzMyIsImIiOiJhZG4tdXNlci1hc3NldHMiLCJrIjoiYXNzZXRzL3VzZXIvNzAvMjQvMjAvNzAyNDIwMDAwMDAwMDAwMC5wbmciLCJvIjoiIn0",
@@ -72,5 +72,8 @@
 }
 
 #pragma mark - UITableViewDelegate methods
-
+-(void) viewWillDisappear:(BOOL)animated
+{
+//    [AsyncableImageView cancelLoadingImages];
+}
 @end

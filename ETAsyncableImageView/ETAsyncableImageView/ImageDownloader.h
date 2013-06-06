@@ -22,5 +22,6 @@
 @protocol ImageDownloaderDelegate <NSObject>
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader;
+- (void)imageDownloaderDidCancel:(ImageDownloader *)downloader;
 
 @end

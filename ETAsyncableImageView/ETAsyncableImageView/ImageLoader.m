@@ -52,7 +52,30 @@ typedef enum {
     }
     return self.image;
 }
++(void)cancelLoadingImages
+{
+    NSLog(@"Initial queue count %i", [[QueueManager sharedInstance].globalQueue operationCount]);
+    [[QueueManager sharedInstance].globalQueue cancelAllOperations];
 
+//    [[QueueManager sharedInstance].globalQueue setSuspended:YES];
+    NSLog(@"Final queue count %i", [[QueueManager sharedInstance].globalQueue operationCount]);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Cancel" object:self];
+    
+    
+    
+}
+-(void)cancelLoadingForURL:(NSString *)URL
+{
+    for(int i = 0 ;i<[QueueManager sharedInstance].globalQueue.operationCount;i++){
+        ImageDownloader *imageDownloader =(ImageDownloader*)[[QueueManager sharedInstance].globalQueue.operations objectAtIndex:i];
+        if([imageDownloader.url isEqual:URL] && !imageDownloader.isCancelled){
+            
+            [imageDownloader cancel];
+            break;
+        }
+    }
+   
+}
 #pragma mark - Private methods
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
@@ -72,7 +95,7 @@ typedef enum {
 }
 
 -(AsyncableImageType)imageTypeForJTDynamicImageURL:(NSURL *)url {
-    AsyncableImageType * imageType;
+    AsyncableImageType imageType;
     NSError *error = nil;
     NSRegularExpression *jpegRegEx = [NSRegularExpression regularExpressionWithPattern:@".*\\.(jpg|jpeg)"
                                                                                options:NSRegularExpressionCaseInsensitive
@@ -135,5 +158,21 @@ typedef enum {
    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
    [self storeImage:self.image withURL:downloader.url];
 }
+
+- (void)imageDownloaderDidCancel:(ImageDownloader *)downloader {
+//    self.image = downloader.image;
+//    NSString * notificationName;
+//    if (self.image) {
+//        notificationName = kIMAGE_DOWNLOADED;
+//    }
+//    else {
+//        notificationName = kIMAGE_DOWNLOAD_FAILED;
+//    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"Cancel" object:self];
+    NSLog(@"Final queue count %i", [[QueueManager sharedInstance].globalQueue operationCount]);
+
+//    [self storeImage:self.image withURL:downloader.url];
+}
+
 
 @end

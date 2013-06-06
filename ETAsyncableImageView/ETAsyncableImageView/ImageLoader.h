@@ -14,5 +14,7 @@
 @property (nonatomic, strong) UIImage *image;
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
++ (void)cancelLoadingImages;
+- (void) cancelLoadingForURL:(NSString*)URL;
 
 @end

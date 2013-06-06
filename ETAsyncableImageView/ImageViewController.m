@@ -34,7 +34,11 @@
     }
     return self;
 }
-
+- (void)viewWillAppear:(BOOL)animated
+{
+    
+    
+}
 - (void)viewDidLoad
 {
   [super viewDidLoad];
@@ -45,6 +49,7 @@
   [self.view addSubview:self.image2];
   
   UIImage *placeholder = [UIImage imageNamed:kPlaceholderImage];
+//[AsyncableImageView cancelLoadingImages];
   [self.image1 showImageFromURL:url1 withPlaceHolderImage:placeholder];
   [self.image2 showImageFromURL:url2 withPlaceHolderImage:placeholder];
   

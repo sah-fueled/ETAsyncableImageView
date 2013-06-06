@@ -18,6 +18,8 @@
 @property(nonatomic, strong) UIImage *placeHolderImage;
 @property(nonatomic, strong) ImageLoader *imageLoader;
 @property(nonatomic, strong) UIActivityIndicatorView *activity;
+@property(nonatomic, assign) BOOL backgroundLoadingEnabled;
+@property (nonatomic, strong) NSString *url;
 
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage;
 
@@ -29,7 +31,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initializtion];
+        [self initialization];
     }
     return self;
 }
@@ -39,7 +41,7 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        [self initializtion];
+        [self initialization];
     }
     return self;
 }
@@ -48,6 +50,7 @@
 
 - (void)showImageFromURL:(NSString *)url{
     self.image = [UIImage imageWithContentsOfFile:url];
+    self.url = url;
     if (self.image) {
         [self imageLoaded];
     }
@@ -61,6 +64,12 @@
                                                  selector:@selector(imageLoadingFailed)
                                                      name:kIMAGE_DOWNLOAD_FAILED
                                                    object:self.imageLoader];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(imageLoadingCanceled)
+                                                     name:@"Cancel"
+                                                   object:self.imageLoader];
+        
       self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
       if (!self.image) {
         self.activity.hidden = NO;
@@ -86,10 +95,20 @@
     [self showImageFromURL:url];
     
 }
-
+-(void)showImageFromURL:(NSString *)url
+   withPlaceHolderImage:(UIImage *) placeHolderImage
+       loadInBackground:(BOOL) backgroundLoadingEnabled{
+    self.placeHolderImage = placeHolderImage;
+    self.backgroundLoadingEnabled = backgroundLoadingEnabled;
+    [self showImageFromURL:url];
+    
+}
++(void)cancelLoadingImages{
+    [ImageLoader cancelLoadingImages];
+}
 #pragma mark - private methods
 
-- (void)initializtion{
+- (void)initialization{
     
     self.activity = [[UIActivityIndicatorView alloc]
                      initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
@@ -144,8 +163,23 @@
     if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
         [self.delegate imageLoadingFinished];
     }
+}
+-(void)imageLoadingCanceled{
     
+    self.activity.hidden = YES;
+    [self.activity stopAnimating];
+    NSLog(@"Loading image cancelled");
     
 }
+- (void)didMoveToWindow{
+//    NSLog(@"self window =%@",self.window);
 
+    if(self.window==nil)
+    {
+ //        NSLog(@"self url =  %@",self.url);
+        [self.imageLoader cancelLoadingForURL:self.url];
+
+    }
+
+}
 @end
