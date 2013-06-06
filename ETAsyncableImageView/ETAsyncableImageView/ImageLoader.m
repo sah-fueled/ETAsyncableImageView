@@ -12,6 +12,7 @@
 #import "MemoryCache.h"
 #import "NSString+MD5.h"
 #import "ImageDownloader.h"
+#import "QueueManager.h"
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
@@ -68,31 +69,6 @@ typedef enum {
         [self startImageDownloadingFromURL:url ForImageView:imageView];
     }
     return self.image;
- 
-//    switch (dataSource) {
-//        case DataSourceTypeMemoryCache:
-//            self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
-//            if (self.image) {
-//                
-//                return self.image;
-//            }
-//            break;
-//        case DataSourceTypeDiskCache:
-//            self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
-//            if (self.image) {
-//                
-//                return self.image;
-//            }
-//            break;
-//        case DataSourceTypeServer:
-//            [self startImageDownloadingFromURL:url ForImageView:imageView];
-//            break;
-//            
-//        default:
-//            break;
-//    }
-  
-    return self.image;
 }
 
 -(AsyncableImageType)imageTypeForJTDynamicImageURL:(NSURL *)url {
@@ -133,18 +109,16 @@ typedef enum {
 #pragma mark - NSOperation Methods
 
 - (NSOperationQueue *)downloadQueue {
-    if (!_downloadQueue) {
-        _downloadQueue = [[NSOperationQueue alloc] init];
-        _downloadQueue.name = @"Image Downloader";
-        _downloadQueue.maxConcurrentOperationCount = 1;
-    }
-    return _downloadQueue;
+    QueueManager * queueManager = [QueueManager sharedInstance];
+    NSOperationQueue *globalQueue = queueManager.globalQueue;
+    return globalQueue;
 }
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
     ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
                                                                    delegate:self];
     [self.downloadQueue addOperation:imageDownloader];
+  NSLog(@"queue count ==> %i", [self.downloadQueue operationCount]);
 }
 
 #pragma mark - ImageDownloaderDelegate method

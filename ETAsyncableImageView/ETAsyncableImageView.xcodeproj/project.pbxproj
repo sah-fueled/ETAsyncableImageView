@@ -15,6 +15,8 @@
 		39911F13175F704F0050808F /* Failed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F0F175F704F0050808F /* Failed@2x.png */; };
 		39911F14175F704F0050808F /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F10175F704F0050808F /* Placeholder.png */; };
 		39911F15175F704F0050808F /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F11175F704F0050808F /* Placeholder@2x.png */; };
+		39911F18175F98B60050808F /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39911F17175F98B60050808F /* ImageViewController.m */; };
+		39911F1E176053BC0050808F /* QueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 39911F1D176053BC0050808F /* QueueManager.m */; };
 		6985BF69175F1EBE007E0426 /* DiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF68175F1EBE007E0426 /* DiskCache.m */; };
 		6985BF6E175F1EC7007E0426 /* MemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6B175F1EC7007E0426 /* MemoryCache.m */; };
 		6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6D175F1EC7007E0426 /* NSString+MD5.m */; };
@@ -43,6 +45,10 @@
 		39911F0F175F704F0050808F /* Failed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Failed@2x.png"; sourceTree = "<group>"; };
 		39911F10175F704F0050808F /* Placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Placeholder.png; sourceTree = "<group>"; };
 		39911F11175F704F0050808F /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
+		39911F16175F98B60050808F /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageViewController.h; path = ../ImageViewController.h; sourceTree = "<group>"; };
+		39911F17175F98B60050808F /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageViewController.m; path = ../ImageViewController.m; sourceTree = "<group>"; };
+		39911F1C176053BC0050808F /* QueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QueueManager.h; path = ../QueueManager.h; sourceTree = "<group>"; };
+		39911F1D176053BC0050808F /* QueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QueueManager.m; path = ../QueueManager.m; sourceTree = "<group>"; };
 		6985BF67175F1EBE007E0426 /* DiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCache.h; sourceTree = "<group>"; };
 		6985BF68175F1EBE007E0426 /* DiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskCache.m; sourceTree = "<group>"; };
 		6985BF6A175F1EC7007E0426 /* MemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryCache.h; sourceTree = "<group>"; };
@@ -151,6 +157,8 @@
 				39911F0D175F704F0050808F /* Resources */,
 				6996AC57175DDB1500059C44 /* ViewController.h */,
 				6996AC58175DDB1500059C44 /* ViewController.m */,
+				39911F16175F98B60050808F /* ImageViewController.h */,
+				39911F17175F98B60050808F /* ImageViewController.m */,
 				6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */,
 			);
 			name = Demo;
@@ -171,6 +179,8 @@
 				39757716175DFC220096099D /* ImageLoader.m */,
 				39757718175DFF990096099D /* ImageDownloader.h */,
 				39757719175DFF9A0096099D /* ImageDownloader.m */,
+				39911F1C176053BC0050808F /* QueueManager.h */,
+				39911F1D176053BC0050808F /* QueueManager.m */,
 			);
 			name = AsyncableHelpers;
 			sourceTree = "<group>";
@@ -255,6 +265,8 @@
 				6985BF69175F1EBE007E0426 /* DiskCache.m in Sources */,
 				6985BF6E175F1EC7007E0426 /* MemoryCache.m in Sources */,
 				6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */,
+				39911F18175F98B60050808F /* ImageViewController.m in Sources */,
+				39911F1E176053BC0050808F /* QueueManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

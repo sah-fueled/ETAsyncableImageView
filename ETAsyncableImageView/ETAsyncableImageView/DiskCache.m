@@ -15,7 +15,7 @@
 #define CACHE_LONGEVITY 86400  
 #endif
 
-#define DISK_LIMIT 20*1024*1024 
+#define DISK_LIMIT 2*1024*1024 
 
 @implementation DiskCache
 
