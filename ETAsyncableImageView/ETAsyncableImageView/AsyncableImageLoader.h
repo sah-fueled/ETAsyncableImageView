@@ -8,11 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol AsyncableImageLoaderProtocol;
+
 @interface AsyncableImageLoader : NSObject
 
-@property (nonatomic, strong) UIImage *image;
-
+@property (nonatomic,weak) id<AsyncableImageLoaderProtocol> delegate;
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
 + (AsyncableImageLoader *) sharedLoader;
+- (UIImage*)getFromMemoryForURL:(NSString*)URL;
+
+@end
+@protocol AsyncableImageLoaderProtocol <NSObject>
+
+-(void) imageLoadingFailedForURL:(NSString*)URL;
+-(void) imageLoadingSuccessfulForURL:(NSString *)URL withImage:(UIImage*)image;
+-(void) imageLoadingCancelledForURL:(NSString *)URL;
 
 @end

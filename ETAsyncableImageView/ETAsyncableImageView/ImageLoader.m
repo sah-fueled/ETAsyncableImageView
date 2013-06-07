@@ -134,6 +134,7 @@ typedef enum {
     else {
       notificationName = kIMAGE_DOWNLOAD_FAILED;
     }
+//    NSLog(@"cache = %@",);
    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
    [self storeImage:self.image withURL:downloader.url];
 }
@@ -142,4 +143,8 @@ typedef enum {
    [[NSNotificationCenter defaultCenter] postNotificationName:@"Download_Canceled" object:self];
 }
 
+- (NSData*)getFromMemoryForURL:(NSString *)URL
+{
+    return  [[MemoryCache sharedCache] getCacheForKey:[URL MD5]];
+}
 @end

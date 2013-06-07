@@ -14,5 +14,6 @@
 @property (nonatomic, strong) UIImage *image;
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
+- (NSData*)getFromMemoryForURL:(NSString*)URL;
 
 @end

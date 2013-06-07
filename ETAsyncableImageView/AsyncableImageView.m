@@ -9,17 +9,20 @@
 #import "AsyncableImageView.h"
 #import "AsyncableImageLoader.h"
 #import "ImageLoader.h" 
+#import "DiskCache.h"
+#import "NSString+MD5.h"
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
 
-@interface AsyncableImageView()
+@interface AsyncableImageView()<AsyncableImageLoaderProtocol>
 
 @property(nonatomic, strong) UIImage *maskImage;
 @property(nonatomic, strong) UIImage *placeHolderImage;
-@property(nonatomic, strong) ImageLoader *imageLoader;
-//@property(nonatomic, strong) AsyncableImageLoader *imageLoader;
+//@property(nonatomic, strong) ImageLoader *imageLoader;
+@property(nonatomic, strong) AsyncableImageLoader *imageLoader;
 @property(nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) NSString *url;
 
 -(UIImage*) maskImage:(UIImage *)image withMask:(UIImage *)maskImage;
 
@@ -49,26 +52,12 @@
 //#pragma mark - public methods
 
 - (void)showImageFromURL:(NSString *)url{
-    self.image = [UIImage imageWithContentsOfFile:url];
-    if (self.image) {
-        [self imageLoaded];
-    }
-    else {
-      [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(imageLoaded)
-                                                     name:kIMAGE_DOWNLOADED
-                                                   object:self.imageLoader];
-      
-      [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(imageLoadingFailed)
-                                                     name:kIMAGE_DOWNLOAD_FAILED
-                                                   object:self.imageLoader];
-        
-      [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(imageLoadingCancelled)
-                                                     name:@"Download_Canceled"
-                                                   object:self.imageLoader];
-        
+    self.url = url;
+//    self.image = [UIImage imageWithContentsOfFile:url];
+//    if (self.image) {
+//         [self imageLoadingSuccessfulForURL:self.url withImage:self.image];
+//         }
+
       self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
       if (!self.image) {
         self.activity.hidden = NO;
@@ -77,9 +66,13 @@
           self.image = self.placeHolderImage;
         }
         else {
-          [self imageLoaded];
+//          [self imageLoaded];
+            self.activity.hidden = NO;
+            [self.activity stopAnimating];
+
+//            [self imageLoadingSuccessfulForURL:self.url withImage:self.image];
         }
-    }
+//    }
 }
 
 - (void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
@@ -107,8 +100,9 @@
     self.activity.frame = rect;
     self.activity.hidden = YES;
     [self addSubview:self.activity];
-//    _imageLoader = [AsyncableImageLoader sharedLoader];
-    _imageLoader = [[ImageLoader alloc]init];
+    _imageLoader = [AsyncableImageLoader sharedLoader];
+    _imageLoader.delegate = self;
+//    _imageLoader = [[ImageLoader alloc]init];
 //    _imageLoader = [[AsyncableImageLoader alloc]init];
 }
 
@@ -133,17 +127,23 @@
     
 }
 
-- (void)imageLoaded{
-    
-    self.activity.hidden = YES;
-    [self.activity stopAnimating];
-    self.image = self.imageLoader.image;
-    
-    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-        [self.delegate imageLoadingFinished];
-    }
-    
-}
+//- (void)imageLoaded{
+//    
+//    //    self.image = self.imageLoader.image;
+//   
+//    if([self.imageLoader getFromMemoryForURL:self.url])
+//    {
+//        
+//        [self.activity stopAnimating];
+//        self.activity.hidden = YES;
+//        self.image = [self.imageLoader getFromMemoryForURL:self.url];
+//    }
+////    NSLog(@"self image =  %@",self.image);
+//    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+//        [self.delegate imageLoadingFinished];
+//    }
+//    
+//}
 
 -(void)imageLoadingFailed{
     
@@ -162,5 +162,28 @@
     [self.activity stopAnimating];
      NSLog(@"Loading image cancelled");
 
+}
+-(void)imageLoadingFailedForURL:(NSString *)URL
+{
+    self.activity.hidden = YES;
+    [self.activity stopAnimating];
+    self.image = [UIImage imageNamed:@"Failed.png"];
+    NSLog(@"Error in loading image");
+}
+
+-(void)imageLoadingSuccessfulForURL:(NSString *)URL withImage:(UIImage *)image
+{
+    if([self.url isEqualToString:URL])
+    {
+        NSLog(@"successful");
+        [self.activity stopAnimating];
+        self.activity.hidden = YES;
+        self.image = [self.imageLoader getFromMemoryForURL:self.url];
+//        self.image =image;
+        NSLog(@"self image =  %@",self.image);
+        if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) 
+            [self.delegate imageLoadingFinished];
+
+    }
 }
 @end

@@ -32,6 +32,7 @@ typedef enum {
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
 @property (nonatomic, strong) NSCache *memoryCache;
 @property (nonatomic, strong) DiskCache *diskCache;
+@property (nonatomic, strong) NSMutableArray *operationsList;
 
 @end
 
@@ -55,22 +56,24 @@ typedef enum {
     self = [super init];
     if(self){
       
-          self.memoryCache = [[NSCache alloc]init];
-          self.downloadQueue = [[NSOperationQueue alloc] init];
+            self.memoryCache = [[NSCache alloc]init];
+            self.downloadQueue = [[NSOperationQueue alloc] init];
             NSLog(@"memory cache = %@",self.memoryCache);
             NSLog(@"queue = %@",self.downloadQueue);
+//            self.diskCache = [DiskCache sharedCache];
     
     }
     return self;
 }
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
+     UIImage *image;
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
-        self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
-        if(self.image) break;
+        image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
+        if(image) break;
     }
-    return self.image;
+    return image;
 }
 
 #pragma mark - Private methods
@@ -81,7 +84,6 @@ typedef enum {
     
     UIImage *image;
     if (dataSource == DataSourceTypeMemoryCache) {
-//        self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
         image = [UIImage imageWithData:[self.memoryCache objectForKey:[url MD5]]];
     }
     else if(dataSource == DataSourceTypeDiskCache){
@@ -95,7 +97,7 @@ typedef enum {
     }
     else {
         [self startImageDownloadingFromURL:url ForImageView:imageView];
-//        image = [UIImage imageWithData:[self.memoryCache objectForKey:[url MD5]]];
+        image = [UIImage imageWithData:[self.memoryCache objectForKey:[url MD5]]];
     }
     return image;
 }
@@ -123,12 +125,12 @@ typedef enum {
     return imageType;
 }
 #pragma mark - NSOperation Methods
-//
-//- (NSOperationQueue *)downloadQueue {
-//    QueueManager * queueManager = [QueueManager sharedInstance];
-//    NSOperationQueue *globalQueue = queueManager.globalQueue;
-//    return globalQueue;
-//}
+
+- (NSOperationQueue *)downloadQueue {
+    QueueManager * queueManager = [QueueManager sharedInstance];
+    NSOperationQueue *globalQueue = queueManager.globalQueue;
+    return globalQueue;
+}
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
     ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
@@ -143,19 +145,25 @@ typedef enum {
 #pragma mark - ImageDownloaderDelegate method
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
-    self.image = downloader.image;
-    NSString * notificationName;
-    if (self.image) {
-        notificationName = kIMAGE_DOWNLOADED;
+    if (downloader.image) {
+           NSLog(@"download image = %@",downloader.image);
+        [self storeImage:downloader.image withURL:downloader.url];
+        if([self.delegate respondsToSelector:@selector(imageLoadingSuccessfulForURL:withImage:)])
+        {
+//            [self.delegate imageLoadingSuccessfulForURL:downloader.url withImage: [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[downloader.url MD5]]]];
+             [self.delegate imageLoadingSuccessfulForURL:downloader.url withImage:downloader.image];
+        }
+       
+    
     }
     else {
-        notificationName = kIMAGE_DOWNLOAD_FAILED;
+        if([self.delegate respondsToSelector:@selector(imageLoadingFailedForURL:)])
+           [self.delegate imageLoadingFailedForURL:downloader.url];
     }
-    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
-//    NSLog(@"self.image =  %@",self.image);
-    [self storeImage:downloader.image withURL:downloader.url];
 }
+-(void)imageDownloaderDidCancel:(ImageDownloader *)downloader {
 
+}
 - (void)storeImage:(UIImage *)image withURL:(NSString *)url{
     
     NSData *imageData = nil;
@@ -165,10 +173,15 @@ typedef enum {
     } else {
         imageData = UIImagePNGRepresentation(image);
     }
-    [[DiskCache sharedCache] setCache:imageData forKey:[url MD5]];
-    if(imageData)
-          [self.memoryCache setObject:imageData forKey:[url MD5]];
 
+    if(imageData){
+        [[DiskCache sharedCache] setCache:imageData forKey:[url MD5]];
+        [self.memoryCache setObject:imageData forKey:[url MD5]];
+    }
+}
+- (UIImage*)getFromMemoryForURL:(NSString *)URL
+{
+    return [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[URL MD5]]];
 }
 
 

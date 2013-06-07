@@ -7,6 +7,7 @@
 //
 
 #import "ImageDownloader.h"
+#import "DiskCache.h"
 
 @interface ImageDownloader ()
 
