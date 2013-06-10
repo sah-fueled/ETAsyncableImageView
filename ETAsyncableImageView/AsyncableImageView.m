@@ -29,7 +29,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self initializtion];
+        [self initialization];
     }
     return self;
 }
@@ -39,7 +39,7 @@
     self = [super initWithCoder:aDecoder];
     
     if (self) {
-        [self initializtion];
+        [self initialization];
     }
     return self;
 }
@@ -89,7 +89,7 @@
 
 #pragma mark - private methods
 
-- (void)initializtion{
+- (void)initialization{
     
     self.activity = [[UIActivityIndicatorView alloc]
                      initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
