@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^imageLoadingSuccessBlock)(UIImage *image, NSString *url);
+typedef void (^imageLoadingFailureBlock)(void);
+
 @protocol ImageDownloaderDelegate;
 
 @interface ImageDownloader : NSOperation
@@ -16,6 +19,9 @@
 @property (nonatomic, strong) NSString *url;
 @property (nonatomic, assign) id <ImageDownloaderDelegate> delegate;
 - (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate;
+- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView
+ withSuccessBlock:(imageLoadingSuccessBlock)successBlock
+ withFailureBlock:(imageLoadingFailureBlock)failureBlock;
 
 @end
 

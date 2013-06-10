@@ -27,7 +27,7 @@ typedef enum {
     DataSourceTypeServer
 } DataSourceType;
 
-typedef void (^imageLoadingCompletionBlock)(void);
+
 
 @interface AsyncableImageLoader()<ImageDownloaderDelegate>
 
@@ -35,8 +35,6 @@ typedef void (^imageLoadingCompletionBlock)(void);
 @property (nonatomic, strong) NSCache *memoryCache;
 @property (nonatomic, strong) DiskCache *diskCache;
 @property (nonatomic, strong) NSMutableArray *operationsList;
-@property (nonatomic, assign) imageLoadingCompletionBlock successBlock;
-@property (nonatomic, assign) imageLoadingCompletionBlock failureBlock;
 @property (nonatomic, strong) UIImageView *imageView;
 
 @end
@@ -86,8 +84,7 @@ typedef void (^imageLoadingCompletionBlock)(void);
         withSuccessBlock:(void (^)(void))successBlock
         withFailureBlock:(void (^)(void))failureBlock{
     UIImage *image;
-    self.successBlock = successBlock;
-    self.failureBlock = failureBlock;
+   
     self.imageView = imageView;
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
@@ -156,9 +153,21 @@ typedef void (^imageLoadingCompletionBlock)(void);
 }
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
-    ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
-                                                                  imageView:imageView
-                                                                   delegate:self];
+//    ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
+//                                                                  imageView:imageView
+//                                                                   delegate:self];
+    ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url
+                                                                 imageView:imageView
+                                                          withSuccessBlock:^(UIImage *image, NSString *url){
+                                                              if (image) {
+                                                                  NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:image, @"IMAGE", url, @"URL", nil];
+                                                               [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOADED object:self userInfo:userInfo];
+                                                                  [self storeImage:image withURL:url];
+                                                              }
+                                                          }
+                                                          withFailureBlock:^(){
+                                                                [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOAD_FAILED object:self];
+                                                          }];
     [self.downloadQueue addOperation:imageDownloader];
     NSLog(@"queue = %@",self.downloadQueue);
     NSLog(@"queue count:  %i",[self.downloadQueue operationCount]);

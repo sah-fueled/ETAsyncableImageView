@@ -118,7 +118,17 @@
     self.activity.hidden = YES;
     [self addSubview:self.activity];
     _imageLoader = [AsyncableImageLoader sharedLoader];
-    _imageLoader.delegate = self;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(imageLoaded:)
+                                                 name:kIMAGE_DOWNLOADED
+                                               object:self.imageLoader];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(imageLoadingFailed:)
+                                                 name:kIMAGE_DOWNLOAD_FAILED
+                                               object:self.imageLoader];
+
+//    _imageLoader.delegate = self;
 //    _imageLoader = [[ImageLoader alloc]init];
 //    _imageLoader = [[AsyncableImageLoader alloc]init];
 }
@@ -144,25 +154,29 @@
     
 }
 
-//- (void)imageLoaded{
-//    
-//    //    self.image = self.imageLoader.image;
-//   
+- (void)imageLoaded:(NSNotification *)notification{
+    NSString *obtainedURL = [notification.userInfo objectForKey:@"URL"];
+    if (obtainedURL == self.url) {
+       [self.activity stopAnimating];
+        self.activity.hidden = YES;
+        self.image = [notification.userInfo objectForKey:@"IMAGE"];
+    }
+    
+    //    self.image = self.imageLoader.image;
 //    if([self.imageLoader getFromMemoryForURL:self.url])
 //    {
-//        
-//        [self.activity stopAnimating];
-//        self.activity.hidden = YES;
-//        self.image = [self.imageLoader getFromMemoryForURL:self.url];
+    
+        
+       // self.image = [self.imageLoader getFromMemoryForURL:self.url];
 //    }
-////    NSLog(@"self image =  %@",self.image);
-//    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-//        [self.delegate imageLoadingFinished];
-//    }
-//    
-//}
+//    NSLog(@"self image =  %@",self.image);
+    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+        [self.delegate imageLoadingFinished];
+    }
+    
+}
 
--(void)imageLoadingFailed{
+-(void)imageLoadingFailed:(NSNotification *)notification{
     
     self.activity.hidden = YES;
     [self.activity stopAnimating];
