@@ -133,7 +133,7 @@
     NSArray *cacheFileList = [manager subpathsAtPath:[self cacheDirectoryPath]];
     NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
   
-  while (cacheFilePath = [cacheEnumerator nextObject]) {
+    while (cacheFilePath = [cacheEnumerator nextObject]) {
         NSDictionary *cacheFileAttributes = [manager attributesOfItemAtPath:
                                             [[self cacheDirectoryPath]stringByAppendingPathComponent:cacheFilePath] error:&error];
         cacheFolderSize += [cacheFileAttributes fileSize];
@@ -142,20 +142,35 @@
 }
 
 - (void)checkAndDumpDiskMemory {
+  if ([self diskCacheFolderSize] > DISK_LIMIT) {
     NSError *error;
     NSFileManager *manager = [NSFileManager defaultManager];
-  
-    if ([self diskCacheFolderSize] > DISK_LIMIT) {
-        NSArray *cacheFileList = [manager subpathsAtPath:[self cacheDirectoryPath]];
-        NSString *prefix = @"/";
-        NSString *fileName = [prefix stringByAppendingString:[cacheFileList objectAtIndex:1]];
-        NSString *filePath = [[self cacheDirectoryPath] stringByAppendingString:fileName];
-        [manager removeItemAtPath:filePath error:&error];
-        [self checkAndDumpDiskMemory];
+    NSMutableDictionary *fileWithsize = [[NSMutableDictionary alloc] init];
+    NSString *cacheFilePath;
+    NSDate *fileModificationDate;
+    
+    NSArray *cacheFileList = [manager subpathsAtPath:[self cacheDirectoryPath]];
+    NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
+    
+    while (cacheFilePath = [cacheEnumerator nextObject]) {
+      NSMutableDictionary *cacheFileAttributes = (NSMutableDictionary *)[manager attributesOfItemAtPath:
+                                           [[self cacheDirectoryPath]stringByAppendingPathComponent:cacheFilePath] error:&error];
+      fileModificationDate = [cacheFileAttributes fileModificationDate];
+      [fileWithsize setValue:fileModificationDate forKey:cacheFilePath];
     }
-    else {
-        return;
-    }
+    NSArray * sortedKeys = [fileWithsize keysSortedByValueUsingSelector:@selector(compare:)];
+    
+    NSString *prefix = @"/";
+    NSString *fileName = [prefix stringByAppendingString:[sortedKeys objectAtIndex:1]];
+    NSString *filePath = [[self cacheDirectoryPath] stringByAppendingString:fileName];
+    NSLog(@"filepath %@", filePath);
+    [manager removeItemAtPath:filePath error:&error];
+    NSLog(@"----%lli------", [self diskCacheFolderSize]);
+    [self checkAndDumpDiskMemory];
+ }
+ else {
+    return;
+  }
 }
 
 - (NSString *)cacheDirectoryPath {
