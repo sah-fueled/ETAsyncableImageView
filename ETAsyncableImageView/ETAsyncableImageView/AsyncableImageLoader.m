@@ -27,12 +27,17 @@ typedef enum {
     DataSourceTypeServer
 } DataSourceType;
 
+typedef void (^imageLoadingCompletionBlock)(void);
+
 @interface AsyncableImageLoader()<ImageDownloaderDelegate>
 
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
 @property (nonatomic, strong) NSCache *memoryCache;
 @property (nonatomic, strong) DiskCache *diskCache;
 @property (nonatomic, strong) NSMutableArray *operationsList;
+@property (nonatomic, assign) imageLoadingCompletionBlock successBlock;
+@property (nonatomic, assign) imageLoadingCompletionBlock failureBlock;
+@property (nonatomic, strong) UIImageView *imageView;
 
 @end
 
@@ -60,7 +65,7 @@ typedef enum {
             self.downloadQueue = [[NSOperationQueue alloc] init];
             NSLog(@"memory cache = %@",self.memoryCache);
             NSLog(@"queue = %@",self.downloadQueue);
-//            self.diskCache = [DiskCache sharedCache];
+            self.diskCache = [DiskCache sharedCache];
     
     }
     return self;
@@ -68,6 +73,22 @@ typedef enum {
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
      UIImage *image;
+   
+    for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
+    {
+        image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
+        if(image) break;
+    }
+    return image;
+}
+- (UIImage *)loadImageWithURL:(NSString *)URL
+            forImageView:(UIImageView *)imageView
+        withSuccessBlock:(void (^)(void))successBlock
+        withFailureBlock:(void (^)(void))failureBlock{
+    UIImage *image;
+    self.successBlock = successBlock;
+    self.failureBlock = failureBlock;
+    self.imageView = imageView;
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
         image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
@@ -80,7 +101,9 @@ typedef enum {
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
                               withURL:(NSString*)url
-                         ForImageView:(UIImageView *)imageView {
+                         ForImageView:(UIImageView *)imageView
+
+{
     
     UIImage *image;
     if (dataSource == DataSourceTypeMemoryCache) {
@@ -139,7 +162,6 @@ typedef enum {
     [self.downloadQueue addOperation:imageDownloader];
     NSLog(@"queue = %@",self.downloadQueue);
     NSLog(@"queue count:  %i",[self.downloadQueue operationCount]);
-//    NSLog(@"url: %@",url);
 }
 
 #pragma mark - ImageDownloaderDelegate method
@@ -148,10 +170,14 @@ typedef enum {
     if (downloader.image) {
            NSLog(@"download image = %@",downloader.image);
         [self storeImage:downloader.image withURL:downloader.url];
+   
+//        if (self.successBlock)
+//            self.successBlock();
         if([self.delegate respondsToSelector:@selector(imageLoadingSuccessfulForURL:withImage:)])
         {
 //            [self.delegate imageLoadingSuccessfulForURL:downloader.url withImage: [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[downloader.url MD5]]]];
              [self.delegate imageLoadingSuccessfulForURL:downloader.url withImage:downloader.image];
+//
         }
        
     

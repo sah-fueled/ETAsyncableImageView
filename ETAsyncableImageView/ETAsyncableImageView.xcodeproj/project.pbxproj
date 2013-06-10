@@ -182,8 +182,8 @@
 				3975770D175DE6CC0096099D /* AsyncableImageView.m */,
 				39757715175DFC220096099D /* ImageLoader.h */,
 				39757716175DFC220096099D /* ImageLoader.m */,
-				39757718175DFF990096099D /* ImageDownloader.h */,
 				39757719175DFF9A0096099D /* ImageDownloader.m */,
+				39757718175DFF990096099D /* ImageDownloader.h */,
 				698A3D231760619F00DD16CF /* AsyncableImageLoader.h */,
 				698A3D241760619F00DD16CF /* AsyncableImageLoader.m */,
 			);

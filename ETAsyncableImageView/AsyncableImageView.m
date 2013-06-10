@@ -69,24 +69,41 @@
 //          [self imageLoaded];
             self.activity.hidden = NO;
             [self.activity stopAnimating];
-
+            
 //            [self imageLoadingSuccessfulForURL:self.url withImage:self.image];
         }
 //    }
 }
 
+- (void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *)placeHolderImage{
+    self.url = url;
+    self.activity.hidden = NO;
+    [self.activity startAnimating];
+    self.image = [self.imageLoader getFromMemoryForURL:url];
+    if(self.imageLoader)
+    self.image = [self.imageLoader loadImageWithURL:url
+                          forImageView:self
+                      withSuccessBlock:^{
+                          
+                           self.image = [self.imageLoader getFromMemoryForURL:self.url];
+                          self.activity.hidden = NO;
+                          [self.activity stopAnimating];
+                      }
+                      withFailureBlock:nil];
+   
+}
 - (void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;
     [self showImageFromURL:url];
     self.image = [self maskImage:self.image withMask:self.maskImage];
 }
 
-- (void)showImageFromURL:(NSString *)url
-    withPlaceHolderImage:(UIImage *)placeHolderImage{
-    self.placeHolderImage = placeHolderImage;
-    [self showImageFromURL:url];
-    
-}
+//- (void)showImageFromURL:(NSString *)url
+//    withPlaceHolderImage:(UIImage *)placeHolderImage{
+//    self.placeHolderImage = placeHolderImage;
+//    [self showImageFromURL:url];
+//    
+//}
 
 #pragma mark - private methods
 
