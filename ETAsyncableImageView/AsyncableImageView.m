@@ -87,6 +87,10 @@
     
 }
 
++(void)setFileDeletionType {
+  
+}
+
 #pragma mark - private methods
 
 - (void)initialization{

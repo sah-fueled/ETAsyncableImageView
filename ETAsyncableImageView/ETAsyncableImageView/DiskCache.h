@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+typedef enum {
+  FileDeletionTypeNone = 0,
+  FileDeletionTypeSize,
+  FileDeletionTypeTime
+} FileDeletionType;
+
 @interface DiskCache : NSObject
 
 +(DiskCache *) sharedCache;
@@ -15,6 +21,8 @@
 -(void)setCache:(NSData *)data forKey:(NSString *)key;
 
 -(NSData *)getCacheForKey:(NSString *)key;
+
+- (void)setFileDeletionType:(FileDeletionType) deletionType;
 
 - (unsigned long long int) diskCacheFolderSize;
 

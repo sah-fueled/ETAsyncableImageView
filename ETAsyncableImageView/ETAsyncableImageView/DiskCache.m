@@ -15,7 +15,13 @@
 #define CACHE_LONGEVITY 86400  
 #endif
 
-#define DISK_LIMIT 2*1024*1024 
+#define DISK_LIMIT 20*1024*1024 
+
+@interface DiskCache ()
+
+@property (nonatomic)FileDeletionType fileDeletionType;
+
+@end
 
 @implementation DiskCache
 
@@ -101,6 +107,10 @@
     }
 }
 
+- (void)setFileDeletionType:(FileDeletionType) deletionType {
+  _fileDeletionType = deletionType;
+}
+
 -(void)clearStaleCaches {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
@@ -148,6 +158,7 @@
     NSMutableDictionary *fileWithsize = [[NSMutableDictionary alloc] init];
     NSString *cacheFilePath;
     NSDate *fileModificationDate;
+    unsigned long long int fileSize;
     
     NSArray *cacheFileList = [manager subpathsAtPath:[self cacheDirectoryPath]];
     NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
@@ -155,18 +166,29 @@
     while (cacheFilePath = [cacheEnumerator nextObject]) {
       NSMutableDictionary *cacheFileAttributes = (NSMutableDictionary *)[manager attributesOfItemAtPath:
                                            [[self cacheDirectoryPath]stringByAppendingPathComponent:cacheFilePath] error:&error];
-      fileModificationDate = [cacheFileAttributes fileModificationDate];
-      [fileWithsize setValue:fileModificationDate forKey:cacheFilePath];
+      if (self.fileDeletionType == FileDeletionTypeTime) {
+        fileModificationDate = [cacheFileAttributes fileModificationDate];
+        [fileWithsize setValue:fileModificationDate forKey:cacheFilePath];
+      }
+      else {
+        fileSize = [cacheFileAttributes fileSize];
+        NSNumber *size = [NSNumber numberWithUnsignedLongLong:fileSize];
+        [fileWithsize setValue:size forKey:cacheFilePath];
+      }
     }
     NSArray * sortedKeys = [fileWithsize keysSortedByValueUsingSelector:@selector(compare:)];
     
     NSString *prefix = @"/";
-    NSString *fileName = [prefix stringByAppendingString:[sortedKeys objectAtIndex:1]];
+    NSString *fileName;
+    if (self.fileDeletionType == FileDeletionTypeTime) {
+       fileName = [prefix stringByAppendingString:[sortedKeys objectAtIndex:1]];
+    }
+    else {
+       fileName = [prefix stringByAppendingString:[sortedKeys objectAtIndex:[sortedKeys count] - 1]];
+    }
     NSString *filePath = [[self cacheDirectoryPath] stringByAppendingString:fileName];
-    NSLog(@"filepath %@", filePath);
-    [manager removeItemAtPath:filePath error:&error];
-    NSLog(@"----%lli------", [self diskCacheFolderSize]);
-    [self checkAndDumpDiskMemory];
+   [manager removeItemAtPath:filePath error:&error];
+   [self checkAndDumpDiskMemory];
  }
  else {
     return;

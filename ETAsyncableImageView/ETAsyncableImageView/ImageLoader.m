@@ -63,6 +63,7 @@ typedef enum {
         self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
     }
     else if(dataSource == DataSourceTypeDiskCache){
+        [[DiskCache sharedCache] setFileDeletionType:FileDeletionTypeSize];
         self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
     }
     else {

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef enum {
+  FileDeletionTypeNone = 0,
+  FileDeletionTypeSize,
+  FileDeletionTypeTime
+} FileDeletionType;
+
 @protocol AsyncableImageViewdelegate;
 
 @interface AsyncableImageView : UIImageView
@@ -17,6 +23,8 @@
 -(void)showImageFromURL:(NSString *)url;
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage;
 -(void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *) placeHolderImage;
+
++(void)setFileDeletionType;
 
 @end
 
