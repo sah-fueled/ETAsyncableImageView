@@ -12,7 +12,6 @@
 #import "MemoryCache.h"
 #import "NSString+MD5.h"
 #import "ImageDownloader.h"
-#import "QueueManager.h"
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
@@ -110,9 +109,14 @@ typedef enum {
 #pragma mark - NSOperation Methods
 
 - (NSOperationQueue *)downloadQueue {
-    QueueManager * queueManager = [QueueManager sharedInstance];
-    NSOperationQueue *globalQueue = queueManager.globalQueue;
-    return globalQueue;
+  static NSOperationQueue *sharedInstance = nil;
+  static dispatch_once_t isDispatched;
+  dispatch_once(&isDispatched, ^
+                {
+                sharedInstance = [[NSOperationQueue alloc] init];
+                });
+  
+  return sharedInstance;
 }
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
