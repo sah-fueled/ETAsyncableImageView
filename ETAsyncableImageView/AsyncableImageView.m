@@ -11,7 +11,6 @@
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
-#define kPlaceholder @"Placeholder.png"
 
 @interface AsyncableImageView()
 
@@ -65,7 +64,7 @@
                                              selector:@selector(imageLoadingFailed)
                                                  name:kIMAGE_DOWNLOAD_FAILED
                                                object:self];
-    UIImage *image = [self loadImageWithURL:url ForImageView:self WithLoadingImage:[UIImage imageNamed:kPlaceholder]];
+    UIImage *image = [self loadImageWithURL:url ForImageView:self WithLoadingImage:placeHolderImage];
     if (!image) {
       self.activity.hidden = NO;
       [self.activity startAnimating];

@@ -12,6 +12,7 @@
 #import "MemoryCache.h"
 #import "NSString+MD5.h"
 #import "ImageDownloader.h"
+#import "UIImageView+Asyncable.h"
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
@@ -144,14 +145,12 @@ typedef enum {
 #pragma mark - ImageDownloaderDelegate method
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
-   NSString * notificationName;
-    if (downloader.image) {
-      notificationName = kIMAGE_DOWNLOADED;
+  if (downloader.image) {
+      [downloader.imageView refreshForAsyncable];
     }
     else {
-      notificationName = kIMAGE_DOWNLOAD_FAILED;
+      [downloader.imageView refreshForAsyncableForFailedImage];
     }
-   [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
    [self storeImage:downloader.image withURL:downloader.url];
 }
 
