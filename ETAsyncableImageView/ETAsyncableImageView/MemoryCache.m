@@ -25,6 +25,9 @@
     return self;
 }
 
+- (void)getImageForKey:(NSString *)key forView:(UIImageView *)imageView {
+   imageView.image  = [UIImage imageWithData:[self getCacheForKey:key]];
+}
 
 -(id)getCacheForKey:(NSString *)key {
     return [self.cache objectForKey:key];

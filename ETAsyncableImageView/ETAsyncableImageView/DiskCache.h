@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MemoryCache.h"
 
 typedef enum {
   FileDeletionTypeNone = 0,
@@ -20,8 +21,12 @@ typedef enum {
 
 -(NSData *)getCacheForKey:(NSString *)key;
 
+- (void)getImageForKey:(NSString *)key forView:(UIImageView *)imageView;
+
 - (void)setFileDeletionType:(FileDeletionType) deletionType;
 
 - (unsigned long long int) diskCacheFolderSize;
+
+@property (nonatomic, weak)MemoryCache *memoryCache;
 
 @end

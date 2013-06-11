@@ -35,7 +35,7 @@ typedef enum {
 @property (nonatomic, strong) DiskCache *diskCache;
 @property (nonatomic, strong) MemoryCache *memoryCache;
 
-- (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url
+- (void)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url
                                                              ForImageView:(UIImageView *)imageView;
 - (void)storeImage:(UIImage*)image withURL:(NSString*)url;
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView;
@@ -61,37 +61,40 @@ typedef enum {
   if (self) {
     _diskCache = [[DiskCache alloc]init];
     _memoryCache = [[MemoryCache alloc] init];
+    _diskCache.memoryCache = _memoryCache;
     _downloadQueue = [[NSOperationQueue alloc]init];
   }
   return  self;
 }
 
-- (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
+- (UIImage *)fetchImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
     {
-        self.image = [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
-        if(self.image) break;
+        [self fetchImageFromDataSource:i withURL:URL ForImageView:imageView];
+        if(imageView.image){
+          self.image = imageView.image;
+          break;
+        }
     }
-    return self.image;
+  return self.image;
 }
 
 #pragma mark - Private methods
 
-- (UIImage *)fetchImageFromDataSource:(DataSourceType)dataSource
+- (void)fetchImageFromDataSource:(DataSourceType)dataSource
                               withURL:(NSString*)url
                          ForImageView:(UIImageView *)imageView {
   
     if (dataSource == DataSourceTypeMemoryCache) {
-        self.image = [UIImage imageWithData:[self.memoryCache getCacheForKey:[url MD5]]];
+      [self.memoryCache getImageForKey:[url MD5] forView:imageView];
     }
     else if(dataSource == DataSourceTypeDiskCache){
-        [self.diskCache setFileDeletionType:FileDeletionTypeSize];
-        self.image = [UIImage imageWithData:[self.diskCache getCacheForKey:[url MD5]]];
+      [self.diskCache setFileDeletionType:FileDeletionTypeSize];
+      [self.diskCache getImageForKey:[url MD5] forView:imageView];
     }
     else {
         [self startImageDownloadingFromURL:url ForImageView:imageView];
     }
-    return self.image;
 }
 
 -(AsyncableImageType)imageTypeForJTDynamicImageURL:(NSURL *)url {
@@ -133,7 +136,7 @@ typedef enum {
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
     ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url
-                                                                   delegate:self];
+                                                                   delegate:self imageView:imageView];
     [self.downloadQueue addOperation:imageDownloader];
   NSLog(@"queue count ==> %i", [self.downloadQueue operationCount]);
 }
@@ -141,16 +144,15 @@ typedef enum {
 #pragma mark - ImageDownloaderDelegate method
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
-    self.image = downloader.image;
-    NSString * notificationName;
-    if (self.image) {
+   NSString * notificationName;
+    if (downloader.image) {
       notificationName = kIMAGE_DOWNLOADED;
     }
     else {
       notificationName = kIMAGE_DOWNLOAD_FAILED;
     }
    [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:self];
-   [self storeImage:self.image withURL:downloader.url];
+   [self storeImage:downloader.image withURL:downloader.url];
 }
 
 @end

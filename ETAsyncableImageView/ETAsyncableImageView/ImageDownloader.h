@@ -14,8 +14,9 @@
 
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) NSString *url;
+@property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, weak) id <ImageDownloaderDelegate> delegate;
-- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate;
+- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate imageView:(UIImageView *)imageView;
 
 @end
 

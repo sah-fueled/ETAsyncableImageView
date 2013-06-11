@@ -15,6 +15,6 @@
 
 +(ImageLoader *)sharedInstance;
 
-- (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
+- (UIImage *)fetchImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
 
 @end

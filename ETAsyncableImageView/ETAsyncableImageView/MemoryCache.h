@@ -14,4 +14,6 @@
 
 -(NSData *)getCacheForKey:(NSString *)key;
 
+- (void)getImageForKey:(NSString *)key forView:(UIImageView *)imageView;
+
 @end

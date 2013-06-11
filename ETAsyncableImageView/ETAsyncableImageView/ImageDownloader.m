@@ -16,11 +16,12 @@
 
 @implementation ImageDownloader
 
-- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate {
+- (id)initWithURL:(NSString *)url delegate:(id<ImageDownloaderDelegate>)delegate imageView:(UIImageView *)imageView {
     
     if (self = [super init]) {
         self.url = url;
        self.delegate = delegate;
+      self.imageView = imageView;
     }
     return self;
 }
@@ -39,6 +40,7 @@
         if (imageData) {
             UIImage *downloadedImage = [UIImage imageWithData:imageData];
             self.image = downloadedImage;
+           self.imageView.image = downloadedImage;
         }
         imageData = nil;
         if (self.isCancelled)

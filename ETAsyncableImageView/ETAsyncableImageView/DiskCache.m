@@ -7,7 +7,7 @@
 //
 
 #import "DiskCache.h"
-#import "MemoryCache.h"
+
 
 #ifdef DEBUG
 #define CACHE_LONGEVITY 86400
@@ -71,17 +71,22 @@
     [data writeToURL:cacheFileURL options:0 error:&error];
     [self checkAndDumpDiskMemory];
     if (data) {
-        [[MemoryCache sharedCache] setCache:data forKey:key];
+        [self.memoryCache setCache:data forKey:key];
     }
 
 }
+
+- (void)getImageForKey:(NSString *)key forView:(UIImageView *)imageView {
+  imageView.image = [UIImage imageWithData:[self getCacheForKey:key]];
+}
+
 
 -(NSData *)getCacheForKey:(NSString *)key {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     NSData *data = [fileManager contentsAtPath:[cacheFileURL path]];
     if(data)
-       [[MemoryCache sharedCache] setCache: data forKey:key];
+       [self.memoryCache setCache: data forKey:key];
     return data;
 }
 

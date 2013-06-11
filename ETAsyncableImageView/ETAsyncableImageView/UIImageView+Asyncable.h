@@ -10,4 +10,8 @@
 
 @interface UIImageView (Asyncable)
 
+- (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView WithLoadingImage:(UIImage *)loadingImage;
+-(void)refreshForAsyncable;
+-(void)refreshForAsyncableForFailedImage;
+
 @end
