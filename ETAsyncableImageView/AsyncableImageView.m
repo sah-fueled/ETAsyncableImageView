@@ -7,6 +7,7 @@
 //
 
 #import "AsyncableImageView.h"
+#import "UIImageView+Asyncable.h"
 #import "ImageLoader.h"
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"

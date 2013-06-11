@@ -25,17 +25,6 @@
 
 @implementation DiskCache
 
-+(DiskCache*) sharedCache{
-    static dispatch_once_t predicate;
-    __strong static DiskCache *sharedCache = nil;
-    
-    dispatch_once(&predicate, ^{
-        sharedCache = [[DiskCache alloc] init];
-    });
-    
-	return sharedCache;
-}
-
 -(id)init {
     self = [super init];
     if (self) {

@@ -16,6 +16,7 @@
 		39911F14175F704F0050808F /* Placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F10175F704F0050808F /* Placeholder.png */; };
 		39911F15175F704F0050808F /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F11175F704F0050808F /* Placeholder@2x.png */; };
 		39911F18175F98B60050808F /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39911F17175F98B60050808F /* ImageViewController.m */; };
+		39C1227F1767309400CB4F58 /* UIImageView+Asyncable.m in Sources */ = {isa = PBXBuildFile; fileRef = 39C1227E1767309400CB4F58 /* UIImageView+Asyncable.m */; };
 		6985BF69175F1EBE007E0426 /* DiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF68175F1EBE007E0426 /* DiskCache.m */; };
 		6985BF6E175F1EC7007E0426 /* MemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6B175F1EC7007E0426 /* MemoryCache.m */; };
 		6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6D175F1EC7007E0426 /* NSString+MD5.m */; };
@@ -46,6 +47,8 @@
 		39911F11175F704F0050808F /* Placeholder@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Placeholder@2x.png"; sourceTree = "<group>"; };
 		39911F16175F98B60050808F /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageViewController.h; path = ../ImageViewController.h; sourceTree = "<group>"; };
 		39911F17175F98B60050808F /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageViewController.m; path = ../ImageViewController.m; sourceTree = "<group>"; };
+		39C1227D1767309400CB4F58 /* UIImageView+Asyncable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Asyncable.h"; sourceTree = "<group>"; };
+		39C1227E1767309400CB4F58 /* UIImageView+Asyncable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Asyncable.m"; sourceTree = "<group>"; };
 		6985BF67175F1EBE007E0426 /* DiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCache.h; sourceTree = "<group>"; };
 		6985BF68175F1EBE007E0426 /* DiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskCache.m; sourceTree = "<group>"; };
 		6985BF6A175F1EC7007E0426 /* MemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryCache.h; sourceTree = "<group>"; };
@@ -164,16 +167,18 @@
 		6996AC62175DE8DC00059C44 /* AsyncableHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				6985BF6A175F1EC7007E0426 /* MemoryCache.h */,
-				6985BF6B175F1EC7007E0426 /* MemoryCache.m */,
-				6985BF6C175F1EC7007E0426 /* NSString+MD5.h */,
-				6985BF6D175F1EC7007E0426 /* NSString+MD5.m */,
-				6985BF67175F1EBE007E0426 /* DiskCache.h */,
-				6985BF68175F1EBE007E0426 /* DiskCache.m */,
 				3975770C175DE6CC0096099D /* AsyncableImageView.h */,
 				3975770D175DE6CC0096099D /* AsyncableImageView.m */,
+				39C1227D1767309400CB4F58 /* UIImageView+Asyncable.h */,
+				39C1227E1767309400CB4F58 /* UIImageView+Asyncable.m */,
 				39757715175DFC220096099D /* ImageLoader.h */,
 				39757716175DFC220096099D /* ImageLoader.m */,
+				6985BF6A175F1EC7007E0426 /* MemoryCache.h */,
+				6985BF6B175F1EC7007E0426 /* MemoryCache.m */,
+				6985BF67175F1EBE007E0426 /* DiskCache.h */,
+				6985BF68175F1EBE007E0426 /* DiskCache.m */,
+				6985BF6C175F1EC7007E0426 /* NSString+MD5.h */,
+				6985BF6D175F1EC7007E0426 /* NSString+MD5.m */,
 				39757718175DFF990096099D /* ImageDownloader.h */,
 				39757719175DFF9A0096099D /* ImageDownloader.m */,
 			);
@@ -261,6 +266,7 @@
 				6985BF6E175F1EC7007E0426 /* MemoryCache.m in Sources */,
 				6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */,
 				39911F18175F98B60050808F /* ImageViewController.m in Sources */,
+				39C1227F1767309400CB4F58 /* UIImageView+Asyncable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

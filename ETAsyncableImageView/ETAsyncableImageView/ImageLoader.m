@@ -32,6 +32,8 @@ typedef enum {
 @interface ImageLoader () <ImageDownloaderDelegate>
 
 @property (nonatomic, strong) NSOperationQueue *downloadQueue;
+@property (nonatomic, strong) DiskCache *diskCache;
+@property (nonatomic, strong) MemoryCache *memoryCache;
 
 - (UIImage *)fetchImageFromDataSource:(DataSourceType) dataSource withURL:(NSString*)url
                                                              ForImageView:(UIImageView *)imageView;
@@ -42,6 +44,27 @@ typedef enum {
 @end
 
 @implementation ImageLoader
+
++(ImageLoader *)sharedInstance {
+  static dispatch_once_t predicate;
+  __strong static ImageLoader *sharedInstance = nil;
+  
+  dispatch_once(&predicate, ^{
+    sharedInstance = [[ImageLoader alloc] init];
+  });
+  
+	return sharedInstance;
+}
+
+- (id)init {
+  self = [super init];
+  if (self) {
+    _diskCache = [[DiskCache alloc]init];
+    _memoryCache = [[MemoryCache alloc] init];
+    _downloadQueue = [[NSOperationQueue alloc]init];
+  }
+  return  self;
+}
 
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView {
     for(int i = DataSourceTypeMemoryCache; i <= DataSourceTypeServer; i++ )
@@ -59,11 +82,11 @@ typedef enum {
                          ForImageView:(UIImageView *)imageView {
   
     if (dataSource == DataSourceTypeMemoryCache) {
-        self.image = [UIImage imageWithData:[[MemoryCache sharedCache] getCacheForKey:[url MD5]]];
+        self.image = [UIImage imageWithData:[self.memoryCache getCacheForKey:[url MD5]]];
     }
     else if(dataSource == DataSourceTypeDiskCache){
-        [[DiskCache sharedCache] setFileDeletionType:FileDeletionTypeSize];
-        self.image = [UIImage imageWithData:[[DiskCache sharedCache] getCacheForKey:[url MD5]]];
+        [self.diskCache setFileDeletionType:FileDeletionTypeSize];
+        self.image = [UIImage imageWithData:[self.diskCache getCacheForKey:[url MD5]]];
     }
     else {
         [self startImageDownloadingFromURL:url ForImageView:imageView];
@@ -103,21 +126,10 @@ typedef enum {
     } else {
         imageData = UIImagePNGRepresentation(image);
     }
-    [[DiskCache sharedCache] setCache:imageData forKey:[url MD5]];
+    [self.diskCache setCache:imageData forKey:[url MD5]];
 }
 
 #pragma mark - NSOperation Methods
-
-- (NSOperationQueue *)downloadQueue {
-  static NSOperationQueue *sharedInstance = nil;
-  static dispatch_once_t isDispatched;
-  dispatch_once(&isDispatched, ^
-                {
-                sharedInstance = [[NSOperationQueue alloc] init];
-                });
-  
-  return sharedInstance;
-}
 
 - (void)startImageDownloadingFromURL:(NSString *)url ForImageView:(UIImageView *)imageView {
     ImageDownloader *imageDownloader = [[ImageDownloader alloc] initWithURL:url

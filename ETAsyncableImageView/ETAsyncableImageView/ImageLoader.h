@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) UIImage *image;
 
++(ImageLoader *)sharedInstance;
+
 - (UIImage *)loadImageWithURL:(NSString *)URL ForImageView:(UIImageView *)imageView;
 
 @end

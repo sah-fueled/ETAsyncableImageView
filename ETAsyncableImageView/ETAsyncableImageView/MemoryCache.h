@@ -10,8 +10,6 @@
 
 @interface MemoryCache : NSObject
 
-+(MemoryCache *) sharedCache;
-
 -(void)setCache:(NSData *)data forKey:(NSString *)key;
 
 -(NSData *)getCacheForKey:(NSString *)key;
