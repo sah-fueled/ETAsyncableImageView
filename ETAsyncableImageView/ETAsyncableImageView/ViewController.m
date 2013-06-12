@@ -65,11 +65,8 @@
 
     } 
     [cell.textLabel setText:[NSString stringWithFormat:@"cell %d",indexPath.row]];
-    AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80)];
-    UIImage *placeholder = [UIImage imageNamed:kPlaceholderImage];
-    imageView.image = placeholder;
-    [imageView showImageFromURL:(NSString*)[self.urlList objectAtIndex:indexPath.row]
-           withPlaceHolderImage:placeholder];
+    AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80) withPlaceHolderImage:[UIImage imageNamed:kPlaceholderImage]];
+    [imageView showImageFromURL:(NSString*)[self.urlList objectAtIndex:indexPath.row]];
     [cell.contentView addSubview:imageView];
     return cell;
 }

@@ -39,16 +39,16 @@
 {
   [super viewDidLoad];
   
-  self.image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 150.0)];
-  self.image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 150.0)];
+//  self.image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 150.0)];
+//  self.image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 150.0)];
+
+  self.image1 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 0.0, 320.0, 150.0) withPlaceHolderImage:[UIImage imageNamed:kPlaceholderImage]];
+  self.image2 = [[AsyncableImageView alloc]initWithFrame:CGRectMake(0.0, 250.0, 320.0, 150.0) withPlaceHolderImage:[UIImage imageNamed:kPlaceholderImage]];
   [self.view addSubview:self.image1];
   [self.view addSubview:self.image2];
+  [self.image1 showImageFromURL:url1];
+  [self.image2 showImageFromURL:url2];
   
-  UIImage *placeholder = [UIImage imageNamed:kPlaceholderImage];
-  [self.image1 showImageFromURL:url1 withPlaceHolderImage:placeholder];
-  [self.image2 showImageFromURL:url2 withPlaceHolderImage:placeholder];
-  
-    
 	// Do any additional setup after loading the view.
 }
 

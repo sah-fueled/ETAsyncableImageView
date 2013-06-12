@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		3975770E175DE6CC0096099D /* AsyncableImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3975770D175DE6CC0096099D /* AsyncableImageView.m */; };
-		39757717175DFC220096099D /* ImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 39757716175DFC220096099D /* ImageLoader.m */; };
 		3975771A175DFF9B0096099D /* ImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 39757719175DFF9A0096099D /* ImageDownloader.m */; };
 		39757720175E11870096099D /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 3975771F175E11870096099D /* NSString+MD5.m */; };
 		39911F12175F704F0050808F /* Failed.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F0E175F704F0050808F /* Failed.png */; };
@@ -37,8 +36,6 @@
 /* Begin PBXFileReference section */
 		3975770C175DE6CC0096099D /* AsyncableImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AsyncableImageView.h; path = ../AsyncableImageView.h; sourceTree = "<group>"; };
 		3975770D175DE6CC0096099D /* AsyncableImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AsyncableImageView.m; path = ../AsyncableImageView.m; sourceTree = "<group>"; };
-		39757715175DFC220096099D /* ImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageLoader.h; sourceTree = "<group>"; };
-		39757716175DFC220096099D /* ImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageLoader.m; sourceTree = "<group>"; };
 		39757718175DFF990096099D /* ImageDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageDownloader.h; sourceTree = "<group>"; };
 		39757719175DFF9A0096099D /* ImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageDownloader.m; sourceTree = "<group>"; };
 		3975771F175E11870096099D /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = SOURCE_ROOT; };
@@ -180,8 +177,6 @@
 				6985BF68175F1EBE007E0426 /* DiskCache.m */,
 				3975770C175DE6CC0096099D /* AsyncableImageView.h */,
 				3975770D175DE6CC0096099D /* AsyncableImageView.m */,
-				39757715175DFC220096099D /* ImageLoader.h */,
-				39757716175DFC220096099D /* ImageLoader.m */,
 				39757718175DFF990096099D /* ImageDownloader.h */,
 				39757719175DFF9A0096099D /* ImageDownloader.m */,
 				698A3D231760619F00DD16CF /* AsyncableImageLoader.h */,
@@ -264,7 +259,6 @@
 				6996AC4D175DDB1500059C44 /* AppDelegate.m in Sources */,
 				6996AC59175DDB1500059C44 /* ViewController.m in Sources */,
 				3975770E175DE6CC0096099D /* AsyncableImageView.m in Sources */,
-				39757717175DFC220096099D /* ImageLoader.m in Sources */,
 				3975771A175DFF9B0096099D /* ImageDownloader.m in Sources */,
 				39757720175E11870096099D /* NSString+MD5.m in Sources */,
 				6985BF69175F1EBE007E0426 /* DiskCache.m in Sources */,

@@ -20,15 +20,15 @@
 
 @implementation ImageDownloader
 
-- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate {
-    
-    if (self = [super init]) {
-        self.url = url;
-        self.imageView = imageView;
-        self.delegate = delegate;
-    }
-    return self;
-}
+//- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate {
+//    
+//    if (self = [super init]) {
+//        self.url = url;
+//        self.imageView = imageView;
+//        self.delegate = delegate;
+//    }
+//    return self;
+//}
 - (id) initWithURL:(NSString *)url imageView:(UIImageView *)imageView withSuccessBlock:(imageLoadingSuccessBlock)successBlock withFailureBlock:(imageLoadingFailureBlock)failureBlock
 {
     if (self = [super init]) {
@@ -56,15 +56,16 @@
         }
         if (!self.imageView.window) {
             [self cancel];
-            [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:)
-                                                        withObject:self
-                                                      waitUntilDone:NO];
+//            [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:)
+//                                                        withObject:self
+//                                                      waitUntilDone:NO];
        }
         if (imageData) {
             UIImage *downloadedImage = [UIImage imageWithData:imageData];
             self.image = downloadedImage;
             dispatch_async( dispatch_get_main_queue(), ^{
                 if(self.successBlock)
+//                    self.imageView.image = downloadedImage;
                     self.successBlock(downloadedImage, self.url);
                     });
         }
