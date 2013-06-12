@@ -7,7 +7,7 @@
 //
 
 #import "DiskCache.h"
-
+#import "MemoryCache.h"
 
 #ifdef DEBUG
 #define CACHE_LONGEVITY 86400
@@ -24,6 +24,18 @@
 @end
 
 @implementation DiskCache
+
++(DiskCache *) sharedCache {
+  
+  static dispatch_once_t predicate;
+  __strong static DiskCache *sharedCache = nil;
+  
+  dispatch_once(&predicate, ^{
+    sharedCache = [[DiskCache alloc] init];
+  });
+  
+	return sharedCache;
+}
 
 -(id)init {
     self = [super init];
@@ -71,7 +83,7 @@
     [data writeToURL:cacheFileURL options:0 error:&error];
     [self checkAndDumpDiskMemory];
     if (data) {
-        [self.memoryCache setCache:data forKey:key];
+        [[MemoryCache sharedCache] setCache:data forKey:key];
     }
 
 }
@@ -86,7 +98,7 @@
     NSURL *cacheFileURL = [[self asyncableCachesDirectory] URLByAppendingPathComponent:key];
     NSData *data = [fileManager contentsAtPath:[cacheFileURL path]];
     if(data)
-       [self.memoryCache setCache: data forKey:key];
+       [[MemoryCache sharedCache] setCache: data forKey:key];
     return data;
 }
 

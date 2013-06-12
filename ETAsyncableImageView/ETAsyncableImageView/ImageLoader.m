@@ -60,9 +60,6 @@ typedef enum {
 - (id)init {
   self = [super init];
   if (self) {
-    _diskCache = [[DiskCache alloc]init];
-    _memoryCache = [[MemoryCache alloc] init];
-    _diskCache.memoryCache = _memoryCache;
     _downloadQueue = [[NSOperationQueue alloc]init];
   }
   return  self;
@@ -87,11 +84,11 @@ typedef enum {
                          ForImageView:(UIImageView *)imageView {
   
     if (dataSource == DataSourceTypeMemoryCache) {
-      [self.memoryCache getImageForKey:[url MD5] forView:imageView];
+      [[MemoryCache sharedCache] getImageForKey:[url MD5] forView:imageView];
     }
     else if(dataSource == DataSourceTypeDiskCache){
-      [self.diskCache setFileDeletionType:FileDeletionTypeSize];
-      [self.diskCache getImageForKey:[url MD5] forView:imageView];
+      [[DiskCache sharedCache] setFileDeletionType:FileDeletionTypeSize];
+      [[DiskCache sharedCache] getImageForKey:[url MD5] forView:imageView];
     }
     else {
         [self startImageDownloadingFromURL:url ForImageView:imageView];
@@ -130,7 +127,7 @@ typedef enum {
     } else {
         imageData = UIImagePNGRepresentation(image);
     }
-    [self.diskCache setCache:imageData forKey:[url MD5]];
+    [[DiskCache sharedCache] setCache:imageData forKey:[url MD5]];
 }
 
 #pragma mark - NSOperation Methods

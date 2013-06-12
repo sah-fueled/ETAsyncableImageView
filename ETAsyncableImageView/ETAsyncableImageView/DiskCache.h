@@ -7,15 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MemoryCache.h"
+
 
 typedef enum {
   FileDeletionTypeNone = 0,
   FileDeletionTypeSize,
   FileDeletionTypeTime
+  
 } FileDeletionType;
 
 @interface DiskCache : NSObject
+
++(DiskCache *)sharedCache;
 
 -(void)setCache:(NSData *)data forKey:(NSString *)key;
 
@@ -26,7 +29,5 @@ typedef enum {
 - (void)setFileDeletionType:(FileDeletionType) deletionType;
 
 - (unsigned long long int) diskCacheFolderSize;
-
-@property (nonatomic, weak)MemoryCache *memoryCache;
 
 @end

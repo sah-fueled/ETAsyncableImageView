@@ -16,8 +16,20 @@
 
 @implementation MemoryCache
 
++(MemoryCache *) sharedCache {
+  
+  static dispatch_once_t predicate;
+  __strong static MemoryCache *sharedCache = nil;
+  
+  dispatch_once(&predicate, ^{
+    sharedCache = [[MemoryCache alloc] init];
+  });
+  
+	return sharedCache;
+}
+
 -(id)init {
-    
+  
     self = [super init];
     if (self) {
         self.cache = [[NSCache alloc] init];
