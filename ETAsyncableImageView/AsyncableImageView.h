@@ -14,6 +14,8 @@
 
 @property(nonatomic, weak)id<AsyncableImageViewdelegate> delegate;
 
+-(id)initWithPlaceHolderImage:(UIImage*)defaultImage;
+
 -(void)showImageFromURL:(NSString *)url;
 -(void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage;
 -(void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *) placeHolderImage;

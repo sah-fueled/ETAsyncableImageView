@@ -19,6 +19,7 @@
 
 @property(nonatomic, strong) UIImage *maskImage;
 @property(nonatomic, strong) UIImage *placeHolderImage;
+@property(nonatomic, strong) UIImageView *placeHolderView;
 //@property(nonatomic, strong) ImageLoader *imageLoader;
 @property(nonatomic, strong) AsyncableImageLoader *imageLoader;
 @property(nonatomic, strong) UIActivityIndicatorView *activity;
@@ -81,16 +82,23 @@
 {
     self.url = url;
     self.image = self.placeHolderImage;
+   
     self.image = [self.imageLoader getFromMemoryForURL:url];
     NSLog(@"self.image = %@",self.image);
-    if(self.image) return;
+    if(self.image)
+    {
+        [self.placeHolderView setHidden:YES];
+        return;
+    }
     else
     {
         self.image = self.placeHolderImage;
+        [self.placeHolderView setHidden:NO];
         self.activity.hidden = NO;
         [self.activity startAnimating];
         if(self.imageLoader)
             self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
+       
 //            self.image = [self.imageLoader loadImageWithURL:url
 //                                               forImageView:self
 //                                           withSuccessBlock:^{
@@ -130,10 +138,14 @@
     rect.origin.y = (self.frame.size.height - rect.size.height)/2;
     self.activity.frame = rect;
     self.activity.hidden = YES;
+    self.placeHolderView = [[UIImageView alloc]initWithFrame:self.bounds];
+    self.placeHolderView.image = [UIImage imageNamed:@"Placeholder"];
+  
+     [self addSubview:self.placeHolderView];
     [self addSubview:self.activity];
     _imageLoader = [AsyncableImageLoader sharedLoader];
-//       UIImage *placeholder = [UIImage imageNamed:@"Placeholder"];
-//    self.image = placeholder;
+    
+
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(imageLoaded:)
                                                  name:kIMAGE_DOWNLOADED
@@ -176,7 +188,9 @@
        [self.activity stopAnimating];
         self.activity.hidden = YES;
         self.image = [notification.userInfo objectForKey:@"IMAGE"];
+         [self.placeHolderView setHidden:YES];
     }
+    
     
     //    self.image = self.imageLoader.image;
 //    if([self.imageLoader getFromMemoryForURL:self.url])

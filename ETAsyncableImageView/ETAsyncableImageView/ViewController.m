@@ -59,14 +59,15 @@
     static NSString *cellIdentifier = @"cell";
     UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellIdentifier];
 
-    if(cell == nil){
+    if(cell == nil)
+    {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 
-    }
+    } 
     [cell.textLabel setText:[NSString stringWithFormat:@"cell %d",indexPath.row]];
-    cell.accessoryView = nil;
     AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80)];
     UIImage *placeholder = [UIImage imageNamed:kPlaceholderImage];
+    imageView.image = placeholder;
     [imageView showImageFromURL:(NSString*)[self.urlList objectAtIndex:indexPath.row]
            withPlaceHolderImage:placeholder];
     [cell.contentView addSubview:imageView];
