@@ -75,22 +75,31 @@
 //    }
 }
 
-- (void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *)placeHolderImage{
+- (void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *)placeHolderImage
+{
     self.url = url;
-    self.activity.hidden = NO;
-    [self.activity startAnimating];
     self.image = [self.imageLoader getFromMemoryForURL:url];
-    if(self.imageLoader)
-    self.image = [self.imageLoader loadImageWithURL:url
-                          forImageView:self
-                      withSuccessBlock:^{
-                          
-                           self.image = [self.imageLoader getFromMemoryForURL:self.url];
-                          self.activity.hidden = NO;
-                          [self.activity stopAnimating];
-                      }
-                      withFailureBlock:nil];
-   
+    if(self.image) return;
+    else
+    {
+        self.image = self.placeHolderImage;
+        self.activity.hidden = NO;
+        [self.activity startAnimating];
+        if(self.imageLoader) self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
+//            self.image = [self.imageLoader loadImageWithURL:url
+//                                               forImageView:self
+//                                           withSuccessBlock:^{
+//                                               
+//                                               self.image = [self.imageLoader getFromMemoryForURL:self.url];
+//                                               self.activity.hidden = NO;
+//                                               [self.activity stopAnimating];
+//                                           }
+//                                           withFailureBlock:nil];
+//        
+
+        
+    }
+
 }
 - (void)showImageFromURL:(NSString *)url withMaskImage:(UIImage *)maskImage{
     self.maskImage = maskImage;

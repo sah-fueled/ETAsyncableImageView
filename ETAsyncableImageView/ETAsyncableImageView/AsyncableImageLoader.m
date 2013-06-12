@@ -61,8 +61,8 @@ typedef enum {
       
             self.memoryCache = [[NSCache alloc]init];
             self.downloadQueue = [[NSOperationQueue alloc] init];
-            NSLog(@"memory cache = %@",self.memoryCache);
-            NSLog(@"queue = %@",self.downloadQueue);
+//            NSLog(@"memory cache = %@",self.memoryCache);
+//            NSLog(@"queue = %@",self.downloadQueue);
             self.diskCache = [DiskCache sharedCache];
     
     }
@@ -169,8 +169,8 @@ typedef enum {
                                                                 [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOAD_FAILED object:self];
                                                           }];
     [self.downloadQueue addOperation:imageDownloader];
-    NSLog(@"queue = %@",self.downloadQueue);
-    NSLog(@"queue count:  %i",[self.downloadQueue operationCount]);
+//    NSLog(@"queue = %@",self.downloadQueue);
+//    NSLog(@"queue count:  %i",[self.downloadQueue operationCount]);
 }
 
 #pragma mark - ImageDownloaderDelegate method
