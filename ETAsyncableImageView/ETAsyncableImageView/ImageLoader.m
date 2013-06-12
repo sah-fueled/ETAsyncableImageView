@@ -146,6 +146,7 @@ typedef enum {
 
 - (void)imageDownloaderDidFinish:(ImageDownloader *)downloader {
   if (downloader.image) {
+     downloader.imageView.image = downloader.image;
       [downloader.imageView refreshForAsyncable];
     }
     else {

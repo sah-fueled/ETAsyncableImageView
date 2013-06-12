@@ -40,7 +40,7 @@
         if (imageData) {
             UIImage *downloadedImage = [UIImage imageWithData:imageData];
             self.image = downloadedImage;
-           self.imageView.image = downloadedImage;
+           //self.imageView.image = downloadedImage;
         }
         imageData = nil;
         if (self.isCancelled)
