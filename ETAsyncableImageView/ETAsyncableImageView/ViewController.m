@@ -62,7 +62,6 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
 
     }
-   [[cell.contentView viewWithTag:1] removeFromSuperview];
     [cell.textLabel setText:[NSString stringWithFormat:@"cell %d",indexPath.row]];
     AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80)];
     UIImage *placeholder = [UIImage imageNamed:kPlaceholderImage];
