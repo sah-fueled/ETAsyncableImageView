@@ -53,6 +53,8 @@
 
 - (void)showImageFromURL:(NSString *)url{
     self.url = url;
+ 
+   
 //    self.image = [UIImage imageWithContentsOfFile:url];
 //    if (self.image) {
 //         [self imageLoadingSuccessfulForURL:self.url withImage:self.image];
@@ -78,14 +80,17 @@
 - (void)showImageFromURL:(NSString *)url withPlaceHolderImage:(UIImage *)placeHolderImage
 {
     self.url = url;
+    self.image = self.placeHolderImage;
     self.image = [self.imageLoader getFromMemoryForURL:url];
+    NSLog(@"self.image = %@",self.image);
     if(self.image) return;
     else
     {
         self.image = self.placeHolderImage;
         self.activity.hidden = NO;
         [self.activity startAnimating];
-        if(self.imageLoader) self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
+        if(self.imageLoader)
+            self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
 //            self.image = [self.imageLoader loadImageWithURL:url
 //                                               forImageView:self
 //                                           withSuccessBlock:^{
@@ -127,6 +132,8 @@
     self.activity.hidden = YES;
     [self addSubview:self.activity];
     _imageLoader = [AsyncableImageLoader sharedLoader];
+//       UIImage *placeholder = [UIImage imageNamed:@"Placeholder"];
+//    self.image = placeholder;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(imageLoaded:)
                                                  name:kIMAGE_DOWNLOADED

@@ -116,8 +116,23 @@ typedef enum {
 
     }
     else {
-        [self startImageDownloadingFromURL:url ForImageView:imageView];
-        image = [UIImage imageWithData:[self.memoryCache objectForKey:[url MD5]]];
+//        [self startImageDownloadingFromURL:url ForImageView:imageView];
+        ImageDownloader *imageDownloader = [[ImageDownloader alloc]initWithURL:url
+                                                                     imageView:imageView
+                                                              withSuccessBlock:^(UIImage *image, NSString *url){
+                                                                  if (image) {
+                                                                      NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:image, @"IMAGE", url, @"URL", nil];
+                                                                      [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOADED object:self userInfo:userInfo];
+                                                                      [self storeImage:image withURL:url];
+                                                                      image = [UIImage imageWithData:[self.memoryCache objectForKey:[url MD5]]];
+                                                                  }
+                                                              }
+                                                              withFailureBlock:^(){
+                                                                  [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOAD_FAILED object:self];
+                                                              }];
+        [self.downloadQueue addOperation:imageDownloader];
+
+        
     }
     return image;
 }
