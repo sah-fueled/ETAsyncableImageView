@@ -49,6 +49,9 @@
 
 - (void)showImageFromURL:(NSString *)url
     withPlaceHolderImage:(UIImage *)placeHolderImage{
+  if (self.image){
+    return;
+  }
   
   self.image = [UIImage imageWithContentsOfFile:url];
   if (self.image) {

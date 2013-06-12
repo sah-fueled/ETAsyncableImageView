@@ -17,6 +17,7 @@
 		39911F15175F704F0050808F /* Placeholder@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 39911F11175F704F0050808F /* Placeholder@2x.png */; };
 		39911F18175F98B60050808F /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39911F17175F98B60050808F /* ImageViewController.m */; };
 		39C1227F1767309400CB4F58 /* UIImageView+Asyncable.m in Sources */ = {isa = PBXBuildFile; fileRef = 39C1227E1767309400CB4F58 /* UIImageView+Asyncable.m */; };
+		39E4DFEA176885A4005DAB58 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 39E4DFE9176885A4005DAB58 /* TestViewController.m */; };
 		6985BF69175F1EBE007E0426 /* DiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF68175F1EBE007E0426 /* DiskCache.m */; };
 		6985BF6E175F1EC7007E0426 /* MemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6B175F1EC7007E0426 /* MemoryCache.m */; };
 		6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6D175F1EC7007E0426 /* NSString+MD5.m */; };
@@ -49,6 +50,8 @@
 		39911F17175F98B60050808F /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageViewController.m; path = ../ImageViewController.m; sourceTree = "<group>"; };
 		39C1227D1767309400CB4F58 /* UIImageView+Asyncable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+Asyncable.h"; sourceTree = "<group>"; };
 		39C1227E1767309400CB4F58 /* UIImageView+Asyncable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+Asyncable.m"; sourceTree = "<group>"; };
+		39E4DFE8176885A4005DAB58 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
+		39E4DFE9176885A4005DAB58 /* TestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestViewController.m; sourceTree = "<group>"; };
 		6985BF67175F1EBE007E0426 /* DiskCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DiskCache.h; sourceTree = "<group>"; };
 		6985BF68175F1EBE007E0426 /* DiskCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DiskCache.m; sourceTree = "<group>"; };
 		6985BF6A175F1EC7007E0426 /* MemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryCache.h; sourceTree = "<group>"; };
@@ -159,6 +162,8 @@
 				6996AC58175DDB1500059C44 /* ViewController.m */,
 				39911F16175F98B60050808F /* ImageViewController.h */,
 				39911F17175F98B60050808F /* ImageViewController.m */,
+				39E4DFE8176885A4005DAB58 /* TestViewController.h */,
+				39E4DFE9176885A4005DAB58 /* TestViewController.m */,
 				6996AC54175DDB1500059C44 /* MainStoryboard.storyboard */,
 			);
 			name = Demo;
@@ -267,6 +272,7 @@
 				6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */,
 				39911F18175F98B60050808F /* ImageViewController.m in Sources */,
 				39C1227F1767309400CB4F58 /* UIImageView+Asyncable.m in Sources */,
+				39E4DFEA176885A4005DAB58 /* TestViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
