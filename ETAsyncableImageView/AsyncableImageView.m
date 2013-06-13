@@ -17,8 +17,6 @@
 
 @interface AsyncableImageView()
 
-@property (nonatomic, strong) UIImage *maskImage;
-@property (nonatomic, strong) UIImage *placeHolderImage;
 @property (nonatomic, strong) UIImageView *placeHolderView;
 @property (nonatomic, strong) AsyncableImageLoader *imageLoader;
 @property (nonatomic, strong) UIActivityIndicatorView *activity;
@@ -96,7 +94,6 @@
     }
     else
     {
-        self.image = self.placeHolderImage;
         [self.placeHolderView setHidden:NO];
         self.activity.hidden = NO;
         [self.activity startAnimating];
@@ -108,6 +105,10 @@
 - (void)stopImageLoadingFromURL:(NSString *)URL{
     
     [self.imageLoader stopImageDownloadingFromURL:URL forImageView:self];
+}
+- (void)stopAllImageLoading
+{
+    [self.imageLoader stopAllDownloading];
 }
 
 #pragma mark - private methods
@@ -124,7 +125,6 @@
         }
     }
 }
-
 -(void)imageLoadingFailed:(NSNotification *)notification{
     
     NSString *obtainedURL = [notification.userInfo objectForKey:@"URL"];
@@ -158,17 +158,17 @@
 
 -(void)didMoveToWindow
 {
-    NSLog(@"hidden");
-    if(!self.image){
+//    NSLog(@"hidden");
+    if(!self.image) {
         self.image = [self.imageLoader getImageFromCacheForURL:self.url];
-    if(self.image){
-        [self.activity stopAnimating];
-        self.activity.hidden = YES;
-        [self.placeHolderView setHidden:YES];
-        if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-            [self.delegate imageLoadingFinished];
+        if(self.image){ //The image has successfully loaded
+            [self.activity stopAnimating];
+            self.activity.hidden = YES;
+            [self.placeHolderView setHidden:YES];
+            if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+                [self.delegate imageLoadingFinished];
+            }
         }
-    }
-    }
+    } 
 }
 @end

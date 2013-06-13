@@ -13,7 +13,8 @@
 + (AsyncableImageLoader *) sharedLoader;
 
 - (UIImage*)getImageFromCacheForURL:(NSString*)URL;
-- (void)startImageDownloadingFromURL:(NSString *)url forImageView:(UIImageView *)imageView;
-- (void)stopImageDownloadingFromURL:(NSString *)url forImageView:(UIImageView *)imageView;
+- (void)startImageDownloadingFromURL:(NSString *)URL forImageView:(UIImageView *)imageView;
+- (void)stopImageDownloadingFromURL:(NSString *)URL forImageView:(UIImageView *)imageView;
+- (void)stopAllDownloading;
 
 @end

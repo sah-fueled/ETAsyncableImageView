@@ -2,12 +2,11 @@
 //  DiskCache.m
 //  ETAsyncableImageView
 //
-//  Created by sah-fueled on 04/06/13.
+//  Created by plb-fueled on 04/06/13.
 //  Copyright (c) 2013 fueled.co. All rights reserved.
 //
 
 #import "DiskCache.h"
-//#import "MemoryCache.h"
 
 #ifdef DEBUG
 #define CACHE_LONGEVITY 86400
@@ -16,6 +15,13 @@
 #endif
 
 #define DISK_LIMIT 20*1024*1024 
+
+
+@interface DiskCache ()
+
+@property (nonatomic)FileDeletionType fileDeletionType;
+
+@end
 
 @implementation DiskCache
 
@@ -84,6 +90,9 @@
     NSData *data = [fileManager contentsAtPath:[cacheFileURL path]];
     return data;
 }
+- (void)getImageForKey:(NSString *)key forView:(UIImageView *)imageView {
+    imageView.image = [UIImage imageWithData:[self getCacheForKey:key]];
+}
 
 -(NSURL *)asyncableCachesDirectory {
     NSArray *urls = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory
@@ -136,7 +145,7 @@
     return cacheFolderSize;
 }
 
-- (void)checkAndDumpDiskMemory {
+/*- (void)checkAndDumpDiskMemory {
     NSError *error;
     NSFileManager *manager = [NSFileManager defaultManager];
   
@@ -151,12 +160,56 @@
     else {
         return;
     }
-}
+}*/
 
 - (NSString *)cacheDirectoryPath {
    NSArray *cachePaths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
    NSString *cacheDirectory = [[cachePaths objectAtIndex:0] stringByAppendingString:@"/Asyncable"];
    return cacheDirectory;
+}
+
+- (void)checkAndDumpDiskMemory {
+    if ([self diskCacheFolderSize] > DISK_LIMIT) {
+        NSError *error;
+        NSFileManager *manager = [NSFileManager defaultManager];
+        NSMutableDictionary *fileWithsize = [[NSMutableDictionary alloc] init];
+        NSString *cacheFilePath;
+        NSDate *fileModificationDate;
+        unsigned long long int fileSize;
+        
+        NSArray *cacheFileList = [manager subpathsAtPath:[self cacheDirectoryPath]];
+        NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
+        
+        while (cacheFilePath = [cacheEnumerator nextObject]) {
+            NSMutableDictionary *cacheFileAttributes = (NSMutableDictionary *)[manager attributesOfItemAtPath:
+                                                                               [[self cacheDirectoryPath]stringByAppendingPathComponent:cacheFilePath] error:&error];
+            if (self.fileDeletionType == FileDeletionTypeTime) {
+                fileModificationDate = [cacheFileAttributes fileModificationDate];
+                [fileWithsize setValue:fileModificationDate forKey:cacheFilePath];
+            }
+            else {
+                fileSize = [cacheFileAttributes fileSize];
+                NSNumber *size = [NSNumber numberWithUnsignedLongLong:fileSize];
+                [fileWithsize setValue:size forKey:cacheFilePath];
+            }
+        }
+        NSArray * sortedKeys = [fileWithsize keysSortedByValueUsingSelector:@selector(compare:)];
+        
+        NSString *prefix = @"/";
+        NSString *fileName;
+        if (self.fileDeletionType == FileDeletionTypeTime) {
+            fileName = [prefix stringByAppendingString:[sortedKeys objectAtIndex:1]];
+        }
+        else {
+            fileName = [prefix stringByAppendingString:[sortedKeys objectAtIndex:[sortedKeys count] - 1]];
+        }
+        NSString *filePath = [[self cacheDirectoryPath] stringByAppendingString:fileName];
+        [manager removeItemAtPath:filePath error:&error];
+        [self checkAndDumpDiskMemory];
+    }
+    else {
+        return;
+    }
 }
 
 @end

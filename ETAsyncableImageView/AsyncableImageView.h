@@ -17,6 +17,7 @@
 - (id)initWithFrame:(CGRect)frame withPlaceHolderImage:(UIImage *)defaultImage;
 - (void)showImageFromURL:(NSString *)URL;
 - (void)stopImageLoadingFromURL:(NSString*)URL;
+- (void)stopAllImageLoading;
 
 @end
 

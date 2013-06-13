@@ -86,9 +86,9 @@ typedef enum {
 
 #pragma mark - NSOperation Methods
 
-- (void)startImageDownloadingFromURL:(NSString *)url forImageView:(UIImageView *)imageView {
+- (void)startImageDownloadingFromURL:(NSString *)URL forImageView:(UIImageView *)imageView {
     ImageDownloader *imageDownloader =
-    [[ImageDownloader alloc]initWithURL:url
+    [[ImageDownloader alloc]initWithURL:URL
                               imageView:imageView
                        withSuccessBlock:^(UIImage *image, NSString *url){
                            if (image) {
@@ -96,15 +96,15 @@ typedef enum {
                             [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOADED
                                                                                 object:self
                                                                               userInfo:userInfo];
-                            [self storeImage:image withURL:url];
+                            [self storeImage:image withURL:URL];
                                   }
                                 }
                        withFailureBlock:^{
-                            NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:url, @"URL", nil];
+                            NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:URL, @"URL", nil];
                             [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOAD_FAILED     object:self userInfo:userInfo];
                               }
                         withCancelBlock:^{
-                            NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:url, @"URL", nil];
+                            NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:URL, @"URL", nil];
                             [[NSNotificationCenter defaultCenter] postNotificationName:kIMAGE_DOWNLOAD_CANCELLED object:self userInfo:userInfo];}];
     
     [self.downloadQueue addOperation:imageDownloader];
@@ -112,14 +112,20 @@ typedef enum {
 //    NSLog(@"queue count:  %i",[self.downloadQueue operationCount]);
 }
 
-- (void)stopImageDownloadingFromURL:(NSString *)url forImageView:(UIImageView *)imageView
+- (void)stopImageDownloadingFromURL:(NSString *)URL forImageView:(UIImageView *)imageView;
 {
     for(ImageDownloader *downloader in self.downloadQueue.operations){
-        if([downloader.url isEqualToString:url]){
+        if([downloader.url isEqualToString:URL]){
             [downloader cancel];
             return;
         }
     }
+}
+- (void)stopAllDownloading{
+    for(ImageDownloader *downloader in self.downloadQueue.operations){
+        [downloader cancel];
+    }
+
 }
 - (void)storeImage:(UIImage *)image withURL:(NSString *)URL{
     

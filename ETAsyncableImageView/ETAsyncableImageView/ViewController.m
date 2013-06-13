@@ -67,6 +67,13 @@
     [cell.textLabel setText:[NSString stringWithFormat:@"cell %d",indexPath.row]];
     AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80) withPlaceHolderImage:[UIImage imageNamed:kPlaceholderImage]];
     [imageView showImageFromURL:(NSString*)[self.urlList objectAtIndex:indexPath.row]];
+    //Testing for cancellation
+//    if(indexPath.row == 5)
+//    {
+//        [imageView stopImageLoadingFromURL:(NSString*)[self.urlList objectAtIndex:2]];
+//        [imageView stopAllImageLoading];
+//
+//    }
     [cell.contentView addSubview:imageView];
     return cell;
 }
