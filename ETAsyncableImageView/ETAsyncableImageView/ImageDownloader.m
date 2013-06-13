@@ -11,7 +11,6 @@
 
 @interface ImageDownloader ()
 
-@property (nonatomic, strong)UIImageView *imageView;
 @property (nonatomic, copy) imageLoadingSuccessBlock successBlock;
 @property (nonatomic, copy) imageLoadingFailureBlock failureBlock;
 @property (nonatomic, copy) imageLoadingCancelBlock cancelBlock;
@@ -20,14 +19,13 @@
 
 @implementation ImageDownloader
 
-- (id) initWithURL:(NSString *)url imageView:(UIImageView *)imageView
+- (id) initWithURL:(NSString *)URL
   withSuccessBlock:(imageLoadingSuccessBlock)successBlock
   withFailureBlock:(imageLoadingFailureBlock)failureBlock
    withCancelBlock:(imageLoadingCancelBlock)cancelBlock
 {
     if (self = [super init]) {
-        self.url = url;
-        self.imageView = imageView;
+        self.url = URL;
         self.successBlock = successBlock;
         self.failureBlock = failureBlock;
         self.cancelBlock = cancelBlock;
@@ -57,11 +55,10 @@
 
         }
         if (imageData) {
-            UIImage *downloadedImage = [UIImage imageWithData:imageData];
-            self.image = downloadedImage;
+            self.image = [UIImage imageWithData:imageData];
             dispatch_async( dispatch_get_main_queue(), ^{
                 if(self.successBlock)
-                    self.successBlock(downloadedImage, self.url);
+                    self.successBlock(self.image, self.url);
                     });
         }
         else {

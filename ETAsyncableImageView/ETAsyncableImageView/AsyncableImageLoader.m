@@ -86,10 +86,9 @@ typedef enum {
 
 #pragma mark - NSOperation Methods
 
-- (void)startImageDownloadingFromURL:(NSString *)URL forImageView:(UIImageView *)imageView {
+- (void)startImageDownloadingFromURL:(NSString *)URL {
     ImageDownloader *imageDownloader =
     [[ImageDownloader alloc]initWithURL:URL
-                              imageView:imageView
                        withSuccessBlock:^(UIImage *image, NSString *url){
                            if (image) {
                             NSDictionary *userInfo = [[NSDictionary alloc]initWithObjectsAndKeys:image, @"IMAGE", url, @"URL", nil];
@@ -112,7 +111,7 @@ typedef enum {
 //    NSLog(@"queue count:  %i",[self.downloadQueue operationCount]);
 }
 
-- (void)stopImageDownloadingFromURL:(NSString *)URL forImageView:(UIImageView *)imageView;
+- (void)stopImageDownloadingFromURL:(NSString *)URL
 {
     for(ImageDownloader *downloader in self.downloadQueue.operations){
         if([downloader.url isEqualToString:URL]){

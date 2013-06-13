@@ -17,7 +17,7 @@ typedef void (^imageLoadingCancelBlock)(void);
 @property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) NSString *url;
 
-- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView
+- (id)initWithURL:(NSString *)URL
  withSuccessBlock:(imageLoadingSuccessBlock)successBlock
  withFailureBlock:(imageLoadingFailureBlock)failureBlock
   withCancelBlock:(imageLoadingCancelBlock)cancelBlock;

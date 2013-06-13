@@ -98,13 +98,13 @@
         self.activity.hidden = NO;
         [self.activity startAnimating];
         if(self.imageLoader)
-            [self.imageLoader startImageDownloadingFromURL:self.url forImageView:self];
+            [self.imageLoader startImageDownloadingFromURL:self.url];
     }
 }
 
 - (void)stopImageLoadingFromURL:(NSString *)URL{
     
-    [self.imageLoader stopImageDownloadingFromURL:URL forImageView:self];
+    [self.imageLoader stopImageDownloadingFromURL:URL];
 }
 - (void)stopAllImageLoading
 {
