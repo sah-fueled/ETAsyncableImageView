@@ -11,61 +11,56 @@
 
 @interface ImageDownloader ()
 
-@property (nonatomic, strong)NSData *responseData;
 @property (nonatomic, strong)UIImageView *imageView;
 @property (nonatomic, copy) imageLoadingSuccessBlock successBlock;
 @property (nonatomic, copy) imageLoadingFailureBlock failureBlock;
+@property (nonatomic, copy) imageLoadingCancelBlock cancelBlock;
 
 @end
 
 @implementation ImageDownloader
 
-//- (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView delegate:(id<ImageDownloaderDelegate>)delegate {
-//    
-//    if (self = [super init]) {
-//        self.url = url;
-//        self.imageView = imageView;
-//        self.delegate = delegate;
-//    }
-//    return self;
-//}
-- (id) initWithURL:(NSString *)url imageView:(UIImageView *)imageView withSuccessBlock:(imageLoadingSuccessBlock)successBlock withFailureBlock:(imageLoadingFailureBlock)failureBlock
+- (id) initWithURL:(NSString *)url imageView:(UIImageView *)imageView
+  withSuccessBlock:(imageLoadingSuccessBlock)successBlock
+  withFailureBlock:(imageLoadingFailureBlock)failureBlock
+   withCancelBlock:(imageLoadingCancelBlock)cancelBlock
 {
     if (self = [super init]) {
         self.url = url;
         self.imageView = imageView;
         self.successBlock = successBlock;
         self.failureBlock = failureBlock;
+        self.cancelBlock = cancelBlock;
     }
     return self;
 }
 - (void)main {
     
     @autoreleasepool {
-        if (self.isCancelled)
-            return;
-        
-        NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.url]];
-        if (self.isCancelled) {
-            imageData = nil;
+        if (self.isCancelled){
+            [self cancel];
             dispatch_async( dispatch_get_main_queue(), ^{
-                if(self.failureBlock)
-                    self.failureBlock();
+                if(self.cancelBlock)
+                    self.cancelBlock();
             });
             return;
+
         }
-        if (!self.imageView.window) {
+        NSData *imageData = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.url]];
+        if (self.isCancelled) {
             [self cancel];
-//            [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidCancel:)
-//                                                        withObject:self
-//                                                      waitUntilDone:NO];
-       }
+            dispatch_async( dispatch_get_main_queue(), ^{
+                if(self.cancelBlock)
+                    self.cancelBlock();
+            });
+            return;
+
+        }
         if (imageData) {
             UIImage *downloadedImage = [UIImage imageWithData:imageData];
             self.image = downloadedImage;
             dispatch_async( dispatch_get_main_queue(), ^{
                 if(self.successBlock)
-//                    self.imageView.image = downloadedImage;
                     self.successBlock(downloadedImage, self.url);
                     });
         }
@@ -77,14 +72,16 @@
 
         }
         imageData = nil;
-        if (self.isCancelled)
+        if (self.isCancelled){
+            
+            [self cancel];
+            dispatch_async( dispatch_get_main_queue(), ^{
+                if(self.cancelBlock)
+                    self.cancelBlock();
+            });
             return;
-        
-      
-        
-//        [(NSObject *)self.delegate performSelectorOnMainThread:@selector(imageDownloaderDidFinish:)
-//                                                    withObject:self
-//                                                 waitUntilDone:NO];
+
+        }
     }
 }
 

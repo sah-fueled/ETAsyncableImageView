@@ -15,13 +15,16 @@
 @property(nonatomic, weak)id<AsyncableImageViewdelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame withPlaceHolderImage:(UIImage *)defaultImage;
-- (void)showImageFromURL:(NSString *)url;
+- (void)showImageFromURL:(NSString *)URL;
+- (void)stopImageLoadingFromURL:(NSString*)URL;
 
 @end
 
 @protocol AsyncableImageViewdelegate <NSObject>
 @optional
 
--(void)imageLoadingFinished;
+- (void)imageLoadingFinished;
+- (void)imageLoadingFailed;
+- (void)imageLoadingCancelled;
 
 @end

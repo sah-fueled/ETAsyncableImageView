@@ -3,7 +3,7 @@
 //  ETAsyncableImageView
 //
 //  Created by plb-fueled on 6/4/13.
-//  Copyright (c) 2013 fueled.co. All rights reserved.
+//  Copyright (c) 2013 fueled.co. All rights reserved. 
 //
 
 #import "AsyncableImageView.h"
@@ -13,14 +13,15 @@
 
 #define kIMAGE_DOWNLOADED @"IMAGE_DOWNLOADED"
 #define kIMAGE_DOWNLOAD_FAILED @"IMAGE_DOWNLOAD_FAILED"
+#define kIMAGE_DOWNLOAD_CANCELLED @"IMAGE_DOWNLOAD_CANCELLED"
 
-@interface AsyncableImageView()<AsyncableImageLoaderProtocol>
+@interface AsyncableImageView()
 
-@property(nonatomic, strong) UIImage *maskImage;
-@property(nonatomic, strong) UIImage *placeHolderImage;
-@property(nonatomic, strong) UIImageView *placeHolderView;
-@property(nonatomic, strong) AsyncableImageLoader *imageLoader;
-@property(nonatomic, strong) UIActivityIndicatorView *activity;
+@property (nonatomic, strong) UIImage *maskImage;
+@property (nonatomic, strong) UIImage *placeHolderImage;
+@property (nonatomic, strong) UIImageView *placeHolderView;
+@property (nonatomic, strong) AsyncableImageLoader *imageLoader;
+@property (nonatomic, strong) UIActivityIndicatorView *activity;
 @property (nonatomic, strong) NSString *url;
 
 @end
@@ -45,6 +46,7 @@
     }
     return self;
 }
+
 - (id)initWithFrame:(CGRect)frame withPlaceHolderImage:(UIImage *)defaultImage
 {
     self = [super initWithFrame:frame];
@@ -67,10 +69,10 @@
     }
     return self;
 }
-//#pragma mark - public methods
+#pragma mark - public methods
 
-- (void)showImageFromURL:(NSString *)url{
-    self.url = url;
+- (void)showImageFromURL:(NSString *)URL{
+    self.url = URL;
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(imageLoaded:)
@@ -81,8 +83,12 @@
                                              selector:@selector(imageLoadingFailed:)
                                                  name:kIMAGE_DOWNLOAD_FAILED
                                                object:self.imageLoader];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(imageLoadingCancelled:)
+                                                 name:kIMAGE_DOWNLOAD_CANCELLED
+                                               object:self.imageLoader];
 
-    self.image = [self.imageLoader getFromMemoryForURL:url];
+    self.image = [self.imageLoader getImageFromCacheForURL:URL];
     if(self.image)
     {
         [self.placeHolderView setHidden:YES];
@@ -95,8 +101,13 @@
         self.activity.hidden = NO;
         [self.activity startAnimating];
         if(self.imageLoader)
-            self.image = [self.imageLoader loadImageWithURL:url ForImageView:self];
+            [self.imageLoader startImageDownloadingFromURL:self.url forImageView:self];
     }
+}
+
+- (void)stopImageLoadingFromURL:(NSString *)URL{
+    
+    [self.imageLoader stopImageDownloadingFromURL:URL forImageView:self];
 }
 
 #pragma mark - private methods
@@ -108,62 +119,56 @@
         self.activity.hidden = YES;
         self.image = [notification.userInfo objectForKey:@"IMAGE"];
          [self.placeHolderView setHidden:YES];
+        if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+            [self.delegate imageLoadingFinished];
+        }
     }
-   if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-        [self.delegate imageLoadingFinished];
-    }
-    
 }
 
 -(void)imageLoadingFailed:(NSNotification *)notification{
     
-    self.activity.hidden = YES;
-    [self.activity stopAnimating];
-    self.image = [UIImage imageNamed:@"Failed.png"];
-    NSLog(@"Error in loading image");
-    if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
-        [self.delegate imageLoadingFinished];
-    }
-    
-    
-}
--(void)imageLoadingCancelled{
-    self.activity.hidden = YES;
-    [self.activity stopAnimating];
-     NSLog(@"Loading image cancelled");
-
-}
--(void)imageLoadingFailedForURL:(NSString *)URL
-{
-    self.activity.hidden = YES;
-    [self.activity stopAnimating];
-    self.image = [UIImage imageNamed:@"Failed.png"];
-    NSLog(@"Error in loading image");
-}
-
--(void)imageLoadingSuccessfulForURL:(NSString *)URL withImage:(UIImage *)image
-{
-    if([self.url isEqualToString:URL])
-    {
-        NSLog(@"successful");
-        [self.activity stopAnimating];
+    NSString *obtainedURL = [notification.userInfo objectForKey:@"URL"];
+    if (obtainedURL == self.url){
         self.activity.hidden = YES;
-        self.image = [self.imageLoader getFromMemoryForURL:self.url];
-//        self.image =image;
-        NSLog(@"self image =  %@",self.image);
-        if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) 
-            [self.delegate imageLoadingFinished];
-
+        [self.activity stopAnimating];
+        [self.placeHolderView setHidden:YES];
+        self.image = [UIImage imageNamed:@"Failed.png"];
+        NSLog(@"Error in loading image");
+        if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+        [self.delegate imageLoadingFailed];
+        }
+    }
+}
+-(void)imageLoadingCancelled:(NSNotification *)notification{
+    
+    NSString *obtainedURL = [notification.userInfo objectForKey:@"URL"];
+    if (obtainedURL == self.url){
+        self.activity.hidden = YES;
+        [self.activity stopAnimating];
+        [self.placeHolderView setHidden:NO];
+        NSLog(@"loading image cancelled");
+        if ([self.delegate respondsToSelector:@selector(imageLoadingCancelled)]) {
+            [self.delegate imageLoadingFailed];
+        }
     }
 }
 -(void) dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-  }
-- (void)viewDidMoveToSuperview{
-
 }
--(void)viewDidMoveToWindow
+
+-(void)didMoveToWindow
 {
     NSLog(@"hidden");
+    if(!self.image){
+        self.image = [self.imageLoader getImageFromCacheForURL:self.url];
+    if(self.image){
+        [self.activity stopAnimating];
+        self.activity.hidden = YES;
+        [self.placeHolderView setHidden:YES];
+        if ([self.delegate respondsToSelector:@selector(imageLoadingFinished)]) {
+            [self.delegate imageLoadingFinished];
+        }
+    }
+    }
 }
 @end

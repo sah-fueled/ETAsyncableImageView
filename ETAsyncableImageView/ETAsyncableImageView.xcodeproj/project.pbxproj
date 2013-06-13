@@ -18,8 +18,6 @@
 		6985BF69175F1EBE007E0426 /* DiskCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF68175F1EBE007E0426 /* DiskCache.m */; };
 		6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 6985BF6D175F1EC7007E0426 /* NSString+MD5.m */; };
 		698A3D251760619F00DD16CF /* AsyncableImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 698A3D241760619F00DD16CF /* AsyncableImageLoader.m */; };
-		698A3D2917606B6500DD16CF /* QueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 698A3D2817606B6500DD16CF /* QueueManager.m */; };
-		698A3D2C17606B6E00DD16CF /* MemoryCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 698A3D2B17606B6E00DD16CF /* MemoryCache.m */; };
 		6996AC3D175DDB1500059C44 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6996AC3C175DDB1500059C44 /* UIKit.framework */; };
 		6996AC3F175DDB1500059C44 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6996AC3E175DDB1500059C44 /* Foundation.framework */; };
 		6996AC41175DDB1500059C44 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6996AC40175DDB1500059C44 /* CoreGraphics.framework */; };
@@ -51,10 +49,6 @@
 		6985BF6D175F1EC7007E0426 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		698A3D231760619F00DD16CF /* AsyncableImageLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncableImageLoader.h; sourceTree = "<group>"; };
 		698A3D241760619F00DD16CF /* AsyncableImageLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncableImageLoader.m; sourceTree = "<group>"; };
-		698A3D2717606B6500DD16CF /* QueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueueManager.h; sourceTree = "<group>"; };
-		698A3D2817606B6500DD16CF /* QueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueueManager.m; sourceTree = "<group>"; };
-		698A3D2A17606B6E00DD16CF /* MemoryCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryCache.h; sourceTree = "<group>"; };
-		698A3D2B17606B6E00DD16CF /* MemoryCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MemoryCache.m; sourceTree = "<group>"; };
 		6996AC38175DDB1500059C44 /* ETAsyncableImageView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ETAsyncableImageView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6996AC3C175DDB1500059C44 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6996AC3E175DDB1500059C44 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -167,10 +161,6 @@
 		6996AC62175DE8DC00059C44 /* AsyncableHelpers */ = {
 			isa = PBXGroup;
 			children = (
-				698A3D2A17606B6E00DD16CF /* MemoryCache.h */,
-				698A3D2B17606B6E00DD16CF /* MemoryCache.m */,
-				698A3D2717606B6500DD16CF /* QueueManager.h */,
-				698A3D2817606B6500DD16CF /* QueueManager.m */,
 				6985BF6C175F1EC7007E0426 /* NSString+MD5.h */,
 				6985BF6D175F1EC7007E0426 /* NSString+MD5.m */,
 				6985BF67175F1EBE007E0426 /* DiskCache.h */,
@@ -265,8 +255,6 @@
 				6985BF6F175F1EC7007E0426 /* NSString+MD5.m in Sources */,
 				39911F18175F98B60050808F /* ImageViewController.m in Sources */,
 				698A3D251760619F00DD16CF /* AsyncableImageLoader.m in Sources */,
-				698A3D2917606B6500DD16CF /* QueueManager.m in Sources */,
-				698A3D2C17606B6E00DD16CF /* MemoryCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

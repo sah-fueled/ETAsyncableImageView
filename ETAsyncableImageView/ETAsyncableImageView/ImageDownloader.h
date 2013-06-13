@@ -10,6 +10,7 @@
 
 typedef void (^imageLoadingSuccessBlock)(UIImage *image, NSString *url);
 typedef void (^imageLoadingFailureBlock)(void);
+typedef void (^imageLoadingCancelBlock)(void);
 
 @interface ImageDownloader : NSOperation
 
@@ -18,7 +19,8 @@ typedef void (^imageLoadingFailureBlock)(void);
 
 - (id)initWithURL:(NSString *)url imageView:(UIImageView *)imageView
  withSuccessBlock:(imageLoadingSuccessBlock)successBlock
- withFailureBlock:(imageLoadingFailureBlock)failureBlock;
+ withFailureBlock:(imageLoadingFailureBlock)failureBlock
+  withCancelBlock:(imageLoadingCancelBlock)cancelBlock;
 
 @end
 
