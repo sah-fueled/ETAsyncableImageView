@@ -65,7 +65,8 @@
 
     } 
     [cell.textLabel setText:[NSString stringWithFormat:@"cell %d",indexPath.row]];
-    AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80) withPlaceHolderImage:[UIImage imageNamed:kPlaceholderImage]];
+//    AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80) withPlaceHolderImage:[UIImage imageNamed:kPlaceholderImage]];
+    AsyncableImageView *imageView = [[AsyncableImageView alloc]initWithFrame:CGRectMake(250,0,70,80) withPlaceHolderImage:nil];
     [imageView showImageFromURL:(NSString*)[self.urlList objectAtIndex:indexPath.row]];
     //Testing for cancellation
 //    if(indexPath.row == 5)

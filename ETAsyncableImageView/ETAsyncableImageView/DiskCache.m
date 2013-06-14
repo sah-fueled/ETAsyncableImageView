@@ -137,7 +137,7 @@
     NSArray *cacheFileList = [manager subpathsAtPath:[self cacheDirectoryPath]];
     NSEnumerator *cacheEnumerator = [cacheFileList objectEnumerator];
   
-  while (cacheFilePath = [cacheEnumerator nextObject]) {
+    while (cacheFilePath = [cacheEnumerator nextObject]) {
         NSDictionary *cacheFileAttributes = [manager attributesOfItemAtPath:
                                             [[self cacheDirectoryPath]stringByAppendingPathComponent:cacheFilePath] error:&error];
         cacheFolderSize += [cacheFileAttributes fileSize];

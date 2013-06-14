@@ -57,6 +57,7 @@
         self.activity.frame = rect;
         self.activity.hidden = YES;
         self.placeHolderView = [[UIImageView alloc]initWithFrame:self.bounds];
+        [self.placeHolderView setBackgroundColor:[UIColor whiteColor]];
         self.placeHolderView.image = defaultImage;
         
         [self addSubview:self.placeHolderView];
